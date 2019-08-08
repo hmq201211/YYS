@@ -15,14 +15,14 @@ from Crack_Onmyoji.player_detail import PlayerDetail
 
 
 class CrackController:
-    console = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\dnconsole.exe '
-    ld = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\ld.exe '
     share_path = 'Onmyoji_images\\'
     speak_out = win32com.client.Dispatch('SAPI.SPVOICE')
     conf = configparser.ConfigParser()
     file_path = './instruction/config.txt'
     conf.read(file_path)
     api = conf.get('config', 'api')
+    console = conf.get('config', 'console') + ' '
+    ld = conf.get('config', 'ld') + ' '
     templates_dict = TemplateLoader.load_templates()
 
     # fetch all thunder simulators list
