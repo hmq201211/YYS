@@ -122,21 +122,24 @@ class CrackService(Thread):
                                 CrackController.touch(self.index, CrackController.cheat(to_click[0]))
                                 CrackController.random_sleep(2, 3)
                         continue
-            if inviter and not auto_invite_flag:
-                exist, location = CrackController.wait_picture(
-                    self.index, 1,
-                    CrackController.share_path + 'invite_in_default.png')
-                if exist:
-                    CrackController.touch(self.index, CrackController.cheat(location))
-                    exist, location = CrackController.wait_picture(
-                        self.index, 1,
-                        CrackController.share_path + 'invite_in_default_confirm.png')
-                    if exist:
-                        CrackController.touch(self.index, CrackController.cheat(location))
-                        auto_invite_flag = True
             CrackController.random_sleep()
             exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
             if exist:
+                if template == 'Onmyoji_images\\6_victory.png':
+                    if inviter and not auto_invite_flag:
+                        exist, location = CrackController.wait_picture(
+                            self.index, 1,
+                            CrackController.share_path + 'invite_in_default.png')
+                        if exist:
+                            CrackController.touch(self.index, CrackController.cheat(location))
+                            exist, location = CrackController.wait_picture(
+                                self.index, 1,
+                                CrackController.share_path + 'invite_in_default_confirm.png')
+                            if exist:
+                                CrackController.touch(self.index, CrackController.cheat(location))
+                                auto_invite_flag = True
+                    else:
+                        CrackController.touch(self.index, CrackController.cheat(location))
                 if template == 'Onmyoji_images\\battle_victory.png':
                     if invite_count > count:
                         break
