@@ -18,9 +18,14 @@ class CrackService(Thread):
         while len(self.task_list) != 0:
             current_task = self.task_list.pop(0)
             if len(current_task) == 1:
-                eval("self." + current_task[0])()
+                accomplish = eval("self." + current_task[0])()
             else:
-                eval("self." + current_task[0])(*current_task[1:])
+                accomplish = eval("self." + current_task[0])(*current_task[1:])
+            if not accomplish:
+                self.task_list.insert(0, current_task)
+                self.start_onmyoji()
+                CrackController.random_sleep()
+                continue
 
     def start_onmyoji(self) -> None:
         if CrackController.is_player_running(self.index):
@@ -66,7 +71,7 @@ class CrackService(Thread):
         self.any_pages_back_to_home_page()
 
     def accept_invite(self, acceptor: bool = True, column_name_list: [(str, str)] = None,
-                      count: int = 10000, timer: int = 60 * 60 * 6) -> None:
+                      count: int = 10000, timer: int = 60 * 60 * 6) -> bool:
         auto_invite_flag = False
         inviter = not acceptor
         invite_count = 1
@@ -74,7 +79,7 @@ class CrackService(Thread):
         while True:
             if acceptor:
                 if time.time() - accept_time > timer:
-                    break
+                    return True
                 # exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
                 # if exist:
                 #     CrackController.touch(self.index, CrackController.cheat(location))
@@ -125,6 +130,8 @@ class CrackService(Thread):
             CrackController.random_sleep()
             exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
             if exist:
+                if template == 'Onmyoji_images\\game_failure_victory.png':
+                    return False
                 if template == 'Onmyoji_images\\6_victory.png':
                     if inviter and not auto_invite_flag:
                         exist, location = CrackController.wait_picture(
@@ -142,7 +149,7 @@ class CrackService(Thread):
                         CrackController.touch(self.index, CrackController.cheat(location))
                 if template == 'Onmyoji_images\\battle_victory.png':
                     if invite_count > count:
-                        break
+                        return True
                     CrackController.random_sleep(3, 4)
                     if inviter:
                         if len(column_name_list) == 2:
@@ -684,12 +691,15 @@ class CrackService(Thread):
                                                              0.99)
             return len(invite_icons) + len(column_name_list) == 2
 
-    def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)], count: int = 10000):
+    def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)],
+                               count: int = 10000) -> bool:
         self._invite_friend_to_team(mode, addition_arg, column_name_list)
         CrackController.random_sleep(1.5, 3)
-        self.accept_invite(False, column_name_list, count)
-        self.leave_team()
-        self.any_pages_back_to_home_page()
+        accomplish = self.accept_invite(False, column_name_list, count)
+        if accomplish:
+            self.leave_team()
+            self.any_pages_back_to_home_page()
+        return accomplish
 
     def group_break_through(self):
         self.any_pages_back_to_home_page()
