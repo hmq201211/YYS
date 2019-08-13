@@ -21,11 +21,12 @@ class CrackService(Thread):
                 accomplish = eval("self." + current_task[0])()
             else:
                 accomplish = eval("self." + current_task[0])(*current_task[1:])
-            if not accomplish:
-                self.task_list.insert(0, current_task)
-                self.start_onmyoji()
-                CrackController.random_sleep()
-                continue
+            if current_task[0] in ["accept_invite", "mitama_or_awake_invite"]:
+                if not accomplish:
+                    self.task_list.insert(0, current_task)
+                    self.start_onmyoji()
+                    CrackController.random_sleep()
+                    continue
 
     def start_onmyoji(self) -> None:
         if CrackController.is_player_running(self.index):
