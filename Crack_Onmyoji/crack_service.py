@@ -81,15 +81,6 @@ class CrackService(Thread):
             if acceptor:
                 if time.time() - accept_time > timer:
                     return True
-                # exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
-                # if exist:
-                #     CrackController.touch(self.index, CrackController.cheat(location))
-                #     CrackController.random_sleep()
-                # exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
-                # if exist:
-                #     if template == 'Onmyoji_images\\battle_victory.png':
-                #         self.leave_team()
-                #         continue
                 screen = CrackController.screen_shot(self.index)
                 _, is_team_leader = CrackController.find_single_picture(screen, CrackController.share_path +
                                                                         'battle_victory.png')
