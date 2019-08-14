@@ -266,7 +266,7 @@ class CrackService(Thread):
                         refresh = True
                         CrackController.random_sleep(3, 5)
                 CrackController.touch(self.index, CrackController.cheat(location))
-                CrackController.random_sleep(3, 4)
+                CrackController.random_sleep()
             click_locations = CrackController.find_all_pictures(screen,
                                                                 CrackController.share_path + 'zero_star.png', 0.95)
             click_position = None
