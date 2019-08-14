@@ -268,7 +268,7 @@ class CrackService(Thread):
                                                             CrackController.share_path
                                                             + 'break_through_money_flag.png')
                     if exist:
-                        print("already beat 3 players")
+                        print("already beat 3 players check once")
                         ticket -= 3
                         refresh = True
                         CrackController.random_sleep(3, 5)
@@ -278,6 +278,14 @@ class CrackService(Thread):
                                                                 CrackController.share_path + 'zero_star.png', 0.96)
             click_position = None
             if len(click_locations) > 0:
+                location, exist = CrackController.find_single_picture(screen,
+                                                                      CrackController.share_path + "2_victory.png")
+                if exist > 0:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                    print("already beat 3 players check twice")
+                    ticket -= 3
+                    refresh = True
+                    CrackController.random_sleep(3, 5)
                 locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'broken2_flag.png',
                                                               0.7)
                 print('beat' + str(len(locations)))
@@ -311,7 +319,7 @@ class CrackService(Thread):
             if refresh:
                 exist, location = CrackController.wait_picture(self.index, 1,
                                                                CrackController.share_path +
-                                                               'breakthrough_refresh.png')
+                                                               'breakthrough_refresh.png', 0.98)
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                     CrackController.random_sleep()
