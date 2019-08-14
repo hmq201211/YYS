@@ -251,7 +251,9 @@ class CrackService(Thread):
             if ticket <= 2:
                 self.any_pages_back_to_home_page()
                 break
-            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
+            screen = CrackController.screen_shot(self.index)
+            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory,
+                                                                           screen=screen)
             if exist:
                 if template in ['Onmyoji_images\\2_victory.png', 'Onmyoji_images\\3_victory.png']:
                     CrackController.random_sleep(3, 4)
@@ -265,34 +267,16 @@ class CrackService(Thread):
                         CrackController.random_sleep(3, 4)
                 CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep()
-            screen = CrackController.screen_shot(self.index)
             click_locations = CrackController.find_all_pictures(screen,
                                                                 CrackController.share_path + 'zero_star.png', 0.95)
             click_position = None
             if len(click_locations) > 0:
-                exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
-                if exist:
-                    if template in ['Onmyoji_images\\2_victory.png', 'Onmyoji_images\\3_victory.png']:
-                        CrackController.random_sleep(3, 4)
-                        exist, _ = CrackController.wait_picture(self.index, 1,
-                                                                CrackController.share_path
-                                                                + 'break_through_money_flag.png')
-                        if exist:
-                            print("already beat 3 players")
-                            ticket -= 3
-                            refresh = True
-                            CrackController.random_sleep(3, 4)
-                    CrackController.touch(self.index, CrackController.cheat(location))
-                    CrackController.random_sleep()
-                screen = CrackController.screen_shot(self.index)
-                locations = CrackController.find_all_pictures(
-                    screen,
-                    CrackController.share_path + 'broken2_flag.png', 0.7)
+                locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'broken2_flag.png',
+                                                              0.7)
                 print('beat' + str(len(locations)))
                 if len(locations) >= 3:
                     refresh = True
                 if not refresh:
-                    screen = CrackController.screen_shot(self.index)
                     remove_locations = CrackController.find_all_pictures(screen,
                                                                          CrackController.share_path
                                                                          + 'break_through_fail_flag.png')
@@ -351,13 +335,6 @@ class CrackService(Thread):
                     sleep_time = 60 * minute + second
                     print('need to sleep... ', sleep_time)
                     CrackController.random_sleep(sleep_time, sleep_time + 10)
-
-    def detour_to_explore_page(self):
-        self.any_pages_back_to_home_page()
-        CrackController.random_sleep()
-        CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
-                                     GameDetail.home_page_explore_right_down)
-        CrackController.random_sleep(1.5, 3)
 
     def group_break_through(self):
         self.detour_to_explore_page()
@@ -637,6 +614,13 @@ class CrackService(Thread):
                 CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep()
         self.any_pages_back_to_home_page()
+
+    def detour_to_explore_page(self):
+        self.any_pages_back_to_home_page()
+        CrackController.random_sleep()
+        CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
+                                     GameDetail.home_page_explore_right_down)
+        CrackController.random_sleep(1.5, 3)
 
     def hundred_ghosts(self, count: int) -> None:
         self.any_pages_back_to_home_page()
