@@ -286,9 +286,9 @@ class CrackController:
                     to_return.append(locations_to_return[index])
         if debug:
             for x, y, w, h in to_return:
-                cv2.circle(screen_shot, (x, y), 5, (0, 0, 255), 3)
+                cv2.circle(screen_shot, (x, y), 5, (0, 0, 255), 2)
                 cv2.rectangle(screen_shot, (x - int(w / 2), y - int(h / 2)), (x + int(w / 2), y + int(h / 2)),
-                              (0, 0, 0), 3)
+                              (0, 0, 0), 2)
                 print('found ', template, ' ,at', x, y)
             cv2.imshow('result graph: ', screen_shot)
             cv2.waitKey(0)

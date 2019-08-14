@@ -34,7 +34,7 @@ def main():
     # os.system('shutdown -s -t 10')
     # c0.accept_invite(timer=60 * 60 * 5)
     # c0.accept_invite(timer=60 * 60 * 3)
-    # os.system('shutdown -s -t 60')
+    os.system('shutdown -s -t 60')
     # c0.hundred_ghosts(100)
     # while True:
     #     c0.hundred_ghosts(100)
