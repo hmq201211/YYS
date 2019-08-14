@@ -264,7 +264,7 @@ class CrackService(Thread):
                         print("already beat 3 players")
                         ticket -= 3
                         refresh = True
-                        CrackController.random_sleep(3, 4)
+                        CrackController.random_sleep(5, 8)
                 CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep()
             click_locations = CrackController.find_all_pictures(screen,
