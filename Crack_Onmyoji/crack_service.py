@@ -97,6 +97,7 @@ class CrackService(Thread):
                     else:
                         self._invite(column_name_list)
                 CrackController.touch(self.index, CrackController.cheat(location))
+                CrackController.random_sleep()
 
     def accept_invite(self, inviter: str, timer: int = 60 * 60 * 6) -> bool:
         accept_time = time.time()
