@@ -351,9 +351,11 @@ class CrackController:
     # check the current screen for the pattern picture list, if there exists, then return it.
     # if there exist many pattern pictures then return the first one, assuming the player is running
     @staticmethod
-    def check_picture_list(index: int, templates: list, threshold: float = 0.85, sleep_time_low: float = 0.4,
+    def check_picture_list(index: int, templates: list, threshold: float = 0.85, screen: list = None,
+                           sleep_time_low: float = 0.4,
                            sleep_time_high: float = 0.6) -> (bool, (int, int, int, int), str):
-        screen = CrackController.screen_shot(index, sleep_time_low, sleep_time_high)
+        if screen is None:
+            screen = CrackController.screen_shot(index, sleep_time_low, sleep_time_high)
         check_list = []
         for template_index, template in enumerate(templates):
             print(str(index), ' is checking... ', template)
