@@ -6,10 +6,8 @@ class TemplateLoader:
     @staticmethod
     def load_templates() -> dict:
         all_files = glob.glob(r'Onmyoji_images\*.png')
-        to_remove_list_1 = glob.glob(r'Onmyoji_images\*_scr.png')
-        to_remove_list_2 = glob.glob(r'Onmyoji_images\*intercepted_picture.png')
+        to_remove_list = glob.glob(r'Onmyoji_images\*_scr.png')
         all_invite_files = glob.glob(r'Onmyoji_images\invite\*.png')
-        to_remove_list = to_remove_list_1 + to_remove_list_2
         all_files = all_files + all_invite_files
         for to_remove in to_remove_list:
             all_files.remove(to_remove)
