@@ -135,11 +135,7 @@ class CrackService(Thread):
                 CrackController.touch(self.index, CrackController.cheat(location))
 
     def _invite_friend_to_team(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
-        self.any_pages_back_to_home_page()
-        CrackController.random_sleep()
-        CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
-                                     GameDetail.home_page_explore_right_down)
-        CrackController.random_sleep(1.5, 3)
+        self.detour_to_explore_page()
         if mode == 'mitama':
             exist, location = CrackController.wait_picture(self.index, 2,
                                                            CrackController.share_path + 'mitama_icon.png')
@@ -238,11 +234,7 @@ class CrackService(Thread):
             return len(invite_icons) + len(column_name_list) == 2
 
     def personal_break_through(self) -> None:
-        self.any_pages_back_to_home_page()
-        CrackController.random_sleep()
-        CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
-                                     GameDetail.home_page_explore_right_down)
-        CrackController.random_sleep(1.5, 3)
+        self.detour_to_explore_page()
         exist, location = CrackController.wait_picture(self.index, 2,
                                                        CrackController.share_path + 'breakthrough_icon.png')
         if exist:
@@ -361,12 +353,15 @@ class CrackService(Thread):
                     print('need to sleep... ', sleep_time)
                     CrackController.random_sleep(sleep_time, sleep_time + 10)
 
-    def group_break_through(self):
+    def detour_to_explore_page(self):
         self.any_pages_back_to_home_page()
         CrackController.random_sleep()
         CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
                                      GameDetail.home_page_explore_right_down)
         CrackController.random_sleep(1.5, 3)
+
+    def group_break_through(self):
+        self.detour_to_explore_page()
         exist, location = CrackController.wait_picture(self.index, 2,
                                                        CrackController.share_path + 'breakthrough_icon.png')
         if exist:
@@ -421,11 +416,7 @@ class CrackService(Thread):
         self.any_pages_back_to_home_page()
 
     def solo_mode(self, mode: str, addition_arg: str, count: int = 10000) -> None:
-        self.any_pages_back_to_home_page()
-        CrackController.random_sleep()
-        CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
-                                     GameDetail.home_page_explore_right_down)
-        CrackController.random_sleep(1.5, 3)
+        self.detour_to_explore_page()
         if mode == 'mitama':
             exist, location = CrackController.wait_picture(self.index, 2,
                                                            CrackController.share_path + 'mitama_icon.png')
@@ -479,18 +470,16 @@ class CrackService(Thread):
                         CrackController.random_sleep(55, 65)
 
     def chapter_solo(self) -> None:
+
+        height = random.randint(*GameDetail.chapter_drag_height)
+        left = random.randint(*GameDetail.chapter_drag_left)
+        right = random.randint(*GameDetail.chapter_drag_right)
+        drag_time = random.randint(1000, 2000)
+
         def drag_to_left():
-            height = random.randint(*GameDetail.chapter_drag_height)
-            left = random.randint(*GameDetail.chapter_drag_left)
-            right = random.randint(*GameDetail.chapter_drag_right)
-            drag_time = random.randint(1000, 2000)
             CrackController.swipe(self.index, (left, height), (right, height), drag_time)
 
         def drag_to_right():
-            height = random.randint(*GameDetail.chapter_drag_height)
-            left = random.randint(*GameDetail.chapter_drag_left)
-            right = random.randint(*GameDetail.chapter_drag_right)
-            drag_time = random.randint(1000, 2000)
             CrackController.swipe(self.index, (right, height), (left, height), drag_time)
 
         self.any_pages_back_to_home_page()
