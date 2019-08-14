@@ -66,7 +66,6 @@ class CrackService(Thread):
         return accomplish
 
     def send_invite(self, column_name_list: [(str, str)] = None, count: int = 10000) -> bool:
-        auto_invite_flag = False
         battle_count = 0
         while True:
             exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
@@ -74,26 +73,24 @@ class CrackService(Thread):
                 if template == 'Onmyoji_images\\game_failure_victory.png':
                     return False
                 if template == 'Onmyoji_images\\6_victory.png':
-                    if not auto_invite_flag:
+                    exist, location = CrackController.wait_picture(
+                        self.index, 1,
+                        CrackController.share_path + 'invite_in_default.png')
+                    if exist:
+                        CrackController.touch(self.index, CrackController.cheat(location))
                         exist, location = CrackController.wait_picture(
                             self.index, 1,
-                            CrackController.share_path + 'invite_in_default.png')
+                            CrackController.share_path + 'invite_in_default_confirm.png')
                         if exist:
                             CrackController.touch(self.index, CrackController.cheat(location))
-                            exist, location = CrackController.wait_picture(
-                                self.index, 1,
-                                CrackController.share_path + 'invite_in_default_confirm.png')
-                            if exist:
-                                CrackController.touch(self.index, CrackController.cheat(location))
-                                auto_invite_flag = True
                     else:
                         CrackController.touch(self.index, CrackController.cheat(location))
                 if template == 'Onmyoji_images\\battle_victory.png':
-                    if battle_count > count:
+                    if battle_count >= count:
                         return True
-                    CrackController.random_sleep(2, 3)
+                    CrackController.random_sleep(3, 5)
                     if len(column_name_list) == 2:
-                        CrackController.random_sleep(3, 5)
+                        CrackController.random_sleep(4, 6)
                     if self._inviter_ready_to_begin_team_battle(column_name_list):
                         battle_count += 1
                         print('--------------invite count-------------------------------------', battle_count)
@@ -117,14 +114,14 @@ class CrackService(Thread):
                                                                           + inviter + ".png")
             if exist > 0:
                 all_locations = CrackController.find_all_pictures(screen,
-                                                                  CrackController.share_path + "invite2_team.png")
+                                                                  CrackController.share_path + "team2_invite.png")
                 if len(all_locations) > 0:
                     CrackController.touch(self.index, CrackController.cheat(all_locations[0]))
                 else:
                     all_locations = CrackController.find_all_pictures(screen,
-                                                                      CrackController.share_path + "invite_team.png")
+                                                                      CrackController.share_path + "team_invite.png")
                     to_click = [location for location in all_locations if
-                                inviter_location[1] in range(location[1], location[1] + 50)]
+                                inviter_location[1] in range(location[1] - 40, location[1])]
                     if len(to_click) > 0:
                         CrackController.touch(self.index, CrackController.cheat(all_locations[0]))
             exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory,
@@ -133,6 +130,7 @@ class CrackService(Thread):
                 if template == 'Onmyoji_images\\game_failure_victory.png':
                     return False
                 CrackController.touch(self.index, CrackController.cheat(location))
+            CrackController.random_sleep()
 
     def _invite_friend_to_team(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
         self.detour_to_explore_page()
