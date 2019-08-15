@@ -240,7 +240,11 @@ class CrackService(Thread):
             return len(invite_icons) + len(column_name_list) == 2
 
     def personal_break_through(self) -> None:
-        self.detour_to_explore_page()
+        self.any_pages_back_to_home_page()
+        CrackController.random_sleep()
+        CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
+                                     GameDetail.home_page_explore_right_down)
+        CrackController.random_sleep(1.5, 3)
         exist, location = CrackController.wait_picture(self.index, 2,
                                                        CrackController.share_path + 'breakthrough_icon.png')
         if exist:
@@ -258,9 +262,7 @@ class CrackService(Thread):
             if ticket <= 2:
                 self.any_pages_back_to_home_page()
                 break
-            screen = CrackController.screen_shot(self.index)
-            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory,
-                                                                           screen=screen)
+            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
             if exist:
                 if template in ['Onmyoji_images\\2_victory.png', 'Onmyoji_images\\3_victory.png']:
                     CrackController.random_sleep(3, 4)
@@ -268,30 +270,40 @@ class CrackService(Thread):
                                                             CrackController.share_path
                                                             + 'break_through_money_flag.png')
                     if exist:
-                        print("already beat 3 players check once")
+                        print("already beat 3 players")
                         ticket -= 3
                         refresh = True
-                        CrackController.random_sleep(3, 5)
+                        CrackController.random_sleep(3, 4)
                 CrackController.touch(self.index, CrackController.cheat(location))
-                CrackController.random_sleep(2, 3)
+                CrackController.random_sleep()
+            screen = CrackController.screen_shot(self.index)
             click_locations = CrackController.find_all_pictures(screen,
-                                                                CrackController.share_path + 'zero_star.png', 0.96)
+                                                                CrackController.share_path + 'zero_star.png', 0.95)
             click_position = None
             if len(click_locations) > 0:
-                location, exist = CrackController.find_single_picture(screen,
-                                                                      CrackController.share_path + "2_victory.png")
-                if exist > 0:
+                exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
+                if exist:
+                    if template in ['Onmyoji_images\\3_victory.png', 'Onmyoji_images\\2_victory.png']:
+                        CrackController.random_sleep(2.5, 4)
+                        exist, _ = CrackController.wait_picture(self.index, 1,
+                                                                CrackController.share_path
+                                                                + 'break_through_money_flag.png')
+                        if exist:
+                            print("already beat 3 players")
+                            ticket -= 3
+                            refresh = True
+                            CrackController.random_sleep(3, 4)
                     CrackController.touch(self.index, CrackController.cheat(location))
-                    print("already beat 3 players check twice")
-                    ticket -= 3
-                    refresh = True
-                    CrackController.random_sleep(3, 5)
-                locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'broken2_flag.png',
-                                                              0.7)
+                    CrackController.random_sleep()
+                screen = CrackController.screen_shot(self.index)
+                locations = CrackController.find_all_pictures(
+                    screen,
+                    CrackController.share_path + 'broken2_flag.png', 0.7)
                 print('beat' + str(len(locations)))
                 if len(locations) >= 3:
                     refresh = True
                 if not refresh:
+                    screen = CrackController.screen_shot(self.index)
                     remove_locations = CrackController.find_all_pictures(screen,
                                                                          CrackController.share_path
                                                                          + 'break_through_fail_flag.png')
@@ -319,7 +331,7 @@ class CrackService(Thread):
             if refresh:
                 exist, location = CrackController.wait_picture(self.index, 1,
                                                                CrackController.share_path +
-                                                               'breakthrough_refresh.png', 0.98)
+                                                               'breakthrough_refresh.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                     CrackController.random_sleep()
