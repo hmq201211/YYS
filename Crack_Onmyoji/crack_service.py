@@ -142,7 +142,7 @@ class CrackService(Thread):
                 if template == 'Onmyoji_images\\game_failure_victory.png':
                     return False
                 CrackController.touch(self.index, CrackController.cheat(location))
-            CrackController.random_sleep(1, 2)
+            CrackController.random_sleep(1, 1.5)
 
     def _invite_friend_to_team(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
         self.detour_to_explore_page()
