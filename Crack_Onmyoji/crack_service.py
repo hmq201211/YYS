@@ -96,10 +96,14 @@ class CrackService(Thread):
                 elif template == 'Onmyoji_images\\battle_victory.png':
                     if battle_count >= count:
                         return True
-                    CrackController.random_sleep(3, 5)
-                    if len(column_name_list) == 2:
-                        CrackController.random_sleep(4, 6)
-                    if self._inviter_ready_to_begin_team_battle(column_name_list):
+                    begin = False
+                    for _ in range(15):
+                        begin = self._inviter_ready_to_begin_team_battle(column_name_list)
+                        if begin:
+                            break
+                        else:
+                            CrackController.random_sleep(1, 2)
+                    if begin:
                         battle_count += 1
                         print('--------------invite count-------------------------------------', battle_count)
                     else:
@@ -227,7 +231,7 @@ class CrackService(Thread):
             if self._inviter_ready_to_begin_team_battle(column_name_list):
                 break
 
-    def _inviter_ready_to_begin_team_battle(self, column_name_list: [(str, str)]):
+    def _inviter_ready_to_begin_team_battle(self, column_name_list: [(str, str)]) -> bool:
         screen = CrackController.screen_shot(self.index)
         invite_icons = CrackController.find_all_pictures(screen,
                                                          CrackController.share_path + 'invite\\invite_icon.png',
