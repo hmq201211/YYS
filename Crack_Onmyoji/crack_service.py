@@ -7,6 +7,8 @@ from Crack_Onmyoji.game_detail import GameDetail
 
 class CrackService(Thread):
     breakthrough_flag = False
+    current_mode = None
+    status_dict = {0: True, 1: True, 2: True, 3: True}
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -58,8 +60,19 @@ class CrackService(Thread):
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)],
                                count: int = 10000) -> bool:
-        count_to_breakthrough = 50
+        CrackService.current_mode = mode
+        self.open_close_buff(mode, True)
+        count_to_breakthrough = 1
         for i in range(count // count_to_breakthrough + 1):
+            while True:
+                all_ready = True
+                for _, value in CrackService.status_dict.items():
+                    if not value:
+                        all_ready = False
+                        CrackController.random_sleep()
+                        break
+                if all_ready:
+                    break
             self._invite_friend_to_team(mode, addition_arg, column_name_list)
             CrackController.random_sleep(1.5, 3)
             accomplish = self.send_invite(column_name_list, count_to_breakthrough)
@@ -67,11 +80,14 @@ class CrackService(Thread):
                 CrackService.breakthrough_flag = True
                 self.leave_team()
                 self.any_pages_back_to_home_page()
+                self.open_close_buff(mode, False)
                 self.personal_break_through()
+                self.open_close_buff(mode, True)
                 CrackService.breakthrough_flag = False
                 CrackController.random_sleep()
             else:
                 return False
+        self.open_close_buff(mode, False)
         return True
 
     def send_invite(self, column_name_list: [(str, str)] = None, count: int = 10000) -> bool:
@@ -85,6 +101,13 @@ class CrackService(Thread):
             if exist:
                 if template == 'Onmyoji_images\\game_failure_victory.png':
                     return False
+                elif template == 'Onmyoji_images\\fail_victory.png':
+                    exist, location = CrackController.wait_picture(self.index, 1,
+                                                                   CrackController.share_path + "6_victory.png")
+                    if exist:
+                        auto_send_invite = False
+                        failure_count += 1
+                        CrackController.touch(self.index, CrackController.cheat(location))
                 elif template == 'Onmyoji_images\\6_victory.png':
                     if not auto_send_invite:
                         exist, location = CrackController.wait_picture(
@@ -128,8 +151,17 @@ class CrackService(Thread):
         while True:
             if CrackService.breakthrough_flag:
                 self.leave_team()
+                self.any_pages_back_to_home_page()
+                CrackService.status_dict[self.index] = False
+                if CrackService.current_mode is not None:
+                    self.open_close_buff(CrackService.current_mode, False)
                 self.personal_break_through()
+                if CrackService.current_mode is not None:
+                    self.open_close_buff(CrackService.current_mode, True)
+                CrackService.status_dict[self.index] = True
             if time.time() - accept_time > timer:
+                if CrackService.current_mode is not None:
+                    self.open_close_buff(CrackService.current_mode, False)
                 return True
             screen = CrackController.screen_shot(self.index)
             _, is_team_leader = CrackController.find_single_picture(screen, CrackController.share_path +
@@ -215,7 +247,12 @@ class CrackService(Thread):
         self._invite(column_name_list)
 
     def _invite(self, column_name_list: [(str, str)]):
+        invite_counter = 0
         while True:
+            if invite_counter >= 10:
+                self.leave_team()
+                invite_counter = 0
+                continue
             exist, location = CrackController.wait_picture(self.index, 1,
                                                            CrackController.share_path + 'invite\\make_up_team.png')
             if exist:
@@ -245,6 +282,7 @@ class CrackService(Thread):
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(12, 15)
+                invite_counter += 1
             if self._inviter_ready_to_begin_team_battle(column_name_list):
                 break
 
