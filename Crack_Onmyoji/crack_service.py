@@ -62,7 +62,7 @@ class CrackService(Thread):
                                count: int = 10000) -> bool:
         CrackService.current_mode = mode
         self.open_close_buff(mode, True)
-        count_to_breakthrough = 1
+        count_to_breakthrough = 50
         for i in range(count // count_to_breakthrough + 1):
             while True:
                 all_ready = True
