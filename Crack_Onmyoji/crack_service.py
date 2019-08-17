@@ -1,3 +1,4 @@
+import math
 import random
 import time
 from threading import Thread
@@ -9,6 +10,7 @@ class CrackService(Thread):
     breakthrough_flag = False
     current_mode = None
     status_dict = {0: True, 1: True, 2: True, 3: True}
+    dont_want_to_breakthrough_list = [1, 2]
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -63,7 +65,7 @@ class CrackService(Thread):
         CrackService.current_mode = mode
         self.open_close_buff(mode, True)
         count_to_breakthrough = 50
-        for i in range(count // count_to_breakthrough + 1):
+        for i in range(math.ceil(count / count_to_breakthrough)):
             while True:
                 all_ready = True
                 for _, value in CrackService.status_dict.items():
@@ -75,13 +77,17 @@ class CrackService(Thread):
                     break
             self._invite_friend_to_team(mode, addition_arg, column_name_list)
             CrackController.random_sleep(1.5, 3)
-            accomplish = self.send_invite(column_name_list, count_to_breakthrough)
+            accomplish = self.send_invite(column_name_list,
+                                          count_to_breakthrough if count_to_breakthrough < count else count)
             if accomplish:
                 CrackService.breakthrough_flag = True
                 self.leave_team()
                 self.any_pages_back_to_home_page()
                 self.open_close_buff(mode, False)
-                self.personal_break_through()
+                if self.index not in CrackService.dont_want_to_breakthrough_list:
+                    self.personal_break_through()
+                else:
+                    CrackController.random_sleep(20, 30)
                 self.open_close_buff(mode, True)
                 CrackService.breakthrough_flag = False
                 CrackController.random_sleep()
@@ -155,7 +161,10 @@ class CrackService(Thread):
                 CrackService.status_dict[self.index] = False
                 if CrackService.current_mode is not None:
                     self.open_close_buff(CrackService.current_mode, False)
-                self.personal_break_through()
+                if self.index not in CrackService.dont_want_to_breakthrough_list:
+                    self.personal_break_through()
+                else:
+                    CrackController.random_sleep(20, 30)
                 if CrackService.current_mode is not None:
                     self.open_close_buff(CrackService.current_mode, True)
                 CrackService.status_dict[self.index] = True
