@@ -10,22 +10,23 @@ def main():
     run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     c0 = CrackService(0, [['accept_invite', 'ybyls']])
-    # c1 = CrackService(1, [['accept_invite', 'ybyls']])
-    # c2 = CrackService(2,
-    #                   [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')], 17]])
-    # c0.setDaemon(True)
-    # c1.setDaemon(True)
-    # c0.start()
-    # c1.start()
-    # c2.start()
-    # c2.join()
-    # c2 = CrackService(2,
-    #                   [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')], 13
-    #                     ]])
-    # c2.start()
-    # c2.join()
+    c1 = CrackService(1, [['accept_invite', 'ybyls']])
+    c2 = CrackService(2,
+                      [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')], 17]])
+    c0.setDaemon(True)
+    c1.setDaemon(True)
+    c0.start()
+    c1.start()
+    c2.start()
+    c2.join()
+    c2 = CrackService(2,
+                      [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')], 13
+                        ]])
+    c2.start()
+    c2.join()
     # c0.personal_break_through()
     # c0.group_break_through()
+    # c0.open_close_buff('mitama', True)
     # c1 = CrackService(0, [['accept_invite']])
     # c2 = CrackService(3,
     #                   [['mitama_or_awake_invite', 'mitama', '11', [('cross', 'xgrcey')]]])
@@ -39,14 +40,14 @@ def main():
     # while True:
     #     c0.hundred_ghosts(100)
     #     CrackController.random_sleep(100, 200)
-    c1 = CrackService(0, [['accept_invite', 'tz', 60 * 60 * 5]])
-    c2 = CrackService(3,
-                      [['mitama_or_awake_invite', 'mitama', '11', [('cross', 'xgrcey')], 500]])
-    c1.setDaemon(True)
-    c1.start()
-    c2.start()
-    c2.join()
-    os.system('shutdown -s -t 60')
+    # c1 = CrackService(0, [['accept_invite', 'tz']])
+    # c2 = CrackService(3,
+    #                   [['mitama_or_awake_invite', 'mitama', '11', [('cross', 'xgrcey')], 400]])
+    # c1.setDaemon(True)
+    # c1.start()
+    # c2.start()
+    # c2.join()
+    # os.system('shutdown -s -t 60')
 
 
 if __name__ == '__main__':

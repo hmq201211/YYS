@@ -6,6 +6,7 @@ from Crack_Onmyoji.game_detail import GameDetail
 
 
 class CrackService(Thread):
+    breakthrough_flag = False
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -57,13 +58,21 @@ class CrackService(Thread):
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)],
                                count: int = 10000) -> bool:
-        self._invite_friend_to_team(mode, addition_arg, column_name_list)
-        CrackController.random_sleep(1.5, 3)
-        accomplish = self.send_invite(column_name_list, count)
-        if accomplish:
-            self.leave_team()
-            self.any_pages_back_to_home_page()
-        return accomplish
+        count_to_breakthrough = 2
+        for i in range(count // count_to_breakthrough + 1):
+            self._invite_friend_to_team(mode, addition_arg, column_name_list)
+            CrackController.random_sleep(1.5, 3)
+            accomplish = self.send_invite(column_name_list, count_to_breakthrough)
+            if accomplish:
+                CrackService.breakthrough_flag = True
+                self.leave_team()
+                self.any_pages_back_to_home_page()
+                self.personal_break_through()
+                CrackService.breakthrough_flag = False
+                CrackController.random_sleep()
+            else:
+                return False
+        return True
 
     def send_invite(self, column_name_list: [(str, str)] = None, count: int = 10000) -> bool:
         battle_count = 0
@@ -117,6 +126,9 @@ class CrackService(Thread):
     def accept_invite(self, inviter: str, timer: int = 60 * 60 * 6) -> bool:
         accept_time = time.time()
         while True:
+            if CrackService.breakthrough_flag:
+                self.leave_team()
+                self.personal_break_through()
             if time.time() - accept_time > timer:
                 return True
             screen = CrackController.screen_shot(self.index)
@@ -204,6 +216,11 @@ class CrackService(Thread):
 
     def _invite(self, column_name_list: [(str, str)]):
         while True:
+            exist, location = CrackController.wait_picture(self.index, 1,
+                                                           CrackController.share_path + 'invite\\make_up_team.png')
+            if exist:
+                CrackController.touch(self.index, CrackController.cheat(location))
+                CrackController.random_sleep()
             for column_name in column_name_list:
                 exist, location = CrackController.wait_picture(self.index, 1,
                                                                CrackController.share_path + 'invite\\invite_icon.png')
