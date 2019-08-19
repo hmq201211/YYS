@@ -10,7 +10,7 @@ class CrackService(Thread):
     breakthrough_flag = False
     current_mode = None
     status_dict = {0: True, 1: True, 2: True, 3: True}
-    dont_want_to_breakthrough_list = [1, 2]
+    dont_want_to_breakthrough_list = [2]
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -62,8 +62,6 @@ class CrackService(Thread):
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)],
                                count: int = 10000) -> bool:
-        CrackService.current_mode = mode
-        self.open_close_buff(mode, True)
         count_to_breakthrough = 50
         for i in range(math.ceil(count / count_to_breakthrough)):
             while True:
@@ -71,10 +69,13 @@ class CrackService(Thread):
                 for _, value in CrackService.status_dict.items():
                     if not value:
                         all_ready = False
-                        CrackController.random_sleep()
+                        CrackController.random_sleep(10, 15)
                         break
                 if all_ready:
                     break
+            CrackService.current_mode = mode
+            self.open_close_buff(mode, True)
+            CrackController.random_sleep(2, 3)
             self._invite_friend_to_team(mode, addition_arg, column_name_list)
             CrackController.random_sleep(1.5, 3)
             accomplish = self.send_invite(column_name_list,
@@ -85,6 +86,7 @@ class CrackService(Thread):
                 self.any_pages_back_to_home_page()
                 self.open_close_buff(mode, False)
                 if self.index not in CrackService.dont_want_to_breakthrough_list:
+                    CrackService.current_mode = None
                     self.personal_break_through()
                 else:
                     CrackController.random_sleep(20, 30)
@@ -154,20 +156,24 @@ class CrackService(Thread):
 
     def accept_invite(self, inviter: str, timer: int = 60 * 60 * 6) -> bool:
         accept_time = time.time()
+        buff_status = False
         while True:
             if CrackService.breakthrough_flag:
                 self.leave_team()
                 self.any_pages_back_to_home_page()
-                CrackService.status_dict[self.index] = False
                 if CrackService.current_mode is not None:
                     self.open_close_buff(CrackService.current_mode, False)
+                    buff_status = False
+                CrackService.status_dict[self.index] = False
                 if self.index not in CrackService.dont_want_to_breakthrough_list:
                     self.personal_break_through()
                 else:
                     CrackController.random_sleep(20, 30)
-                if CrackService.current_mode is not None:
-                    self.open_close_buff(CrackService.current_mode, True)
                 CrackService.status_dict[self.index] = True
+            else:
+                if CrackService.current_mode is not None and not buff_status:
+                    self.open_close_buff(CrackService.current_mode, True)
+                    buff_status = True
             if time.time() - accept_time > timer:
                 if CrackService.current_mode is not None:
                     self.open_close_buff(CrackService.current_mode, False)
