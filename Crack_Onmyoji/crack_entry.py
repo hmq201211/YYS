@@ -12,13 +12,13 @@ def main():
     c0 = CrackService(0, [['accept_invite', 'ybyls']])
     c1 = CrackService(1, [['accept_invite', 'ybyls']])
     c2 = CrackService(2,
-                      [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')], 2]])
+                      [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')], 1]])
     c0.start()
     c1.start()
     c2.start()
     c2.join()
     c2 = CrackService(2,
-                      [['mitama_or_awake_invite', 'awake', 'wind', [('cross', 'ybymq'), ('cross', 'xgrcey')], 2
+                      [['mitama_or_awake_invite', 'awake', 'wind', [('cross', 'ybymq'), ('cross', 'xgrcey')], 1
                         ]])
     c2.start()
     c2.join()
