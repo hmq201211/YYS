@@ -89,6 +89,7 @@ class CrackService(Thread):
                     CrackService.current_mode = None
                     self.personal_break_through()
                 else:
+                    CrackService.current_mode = None
                     CrackController.random_sleep(20, 30)
                 self.open_close_buff(mode, True)
                 CrackService.breakthrough_flag = False
