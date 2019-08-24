@@ -6,7 +6,6 @@ import winsound
 import win32com.client
 import time
 import numpy
-from faker import Factory
 import cv2
 import requests
 import glob

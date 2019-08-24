@@ -814,13 +814,11 @@ class CrackService(Thread):
         while True:
             count += 1
             screen = CrackController.screen_shot(self.index)
-            locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png', 0.65)
+            locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'max_level_flag2.png',
+                                                          0.65)
             CrackController.random_sleep()
             if len(locations) > 0 or count > 3:
                 break
-        # exist, locations = CrackController.wait_picture(self.index, 10,
-        #                                                                CrackController.share_path + 'max.png')
-        # 查询满经验式神数量是否只有狗粮队长1个；
         if len(locations) > 1:
             # 双击指定区域，高视角切换低视角
             CrackController.random_click(self.index, GameDetail.change_attendant_click_left_up,
@@ -842,9 +840,8 @@ class CrackService(Thread):
 
             # 低视角查询满经验式神数量
             screen = CrackController.screen_shot(self.index)
-            locations_list = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png', 0.65)
-            # 简略的标识已经上场的狗粮
-            count = 0
+            locations_list = CrackController.find_all_pictures(screen,
+                                                               CrackController.share_path + 'max_level_flag2.png', 0.65)
             if len(locations_list) != 0:
                 for x, y, w, h in locations_list:
                     # 默认低视角最左边为队长
@@ -852,11 +849,22 @@ class CrackService(Thread):
                         while True:
                             screen = CrackController.screen_shot(self.index)
                             locations_list = CrackController.find_all_pictures(screen, CrackController.share_path +
-                                                                               'level_one_flag.png', 0.65)
-                            if len(locations_list) > count:
+                                                                               'level_one_flag.png')
+                            remove_locations_list = CrackController.find_all_pictures(screen,
+                                                                                      CrackController.share_path +
+                                                                                      'backup_in_team_flag.png')
+                            if len(remove_locations_list) > 0:
+                                to_remove = []
+                                for location in locations_list:
+                                    for remove in remove_locations_list:
+                                        if location[0] in range(remove[0] - 100, remove[0]):
+                                            to_remove.append(location)
+                                for remove in to_remove:
+                                    locations_list.remove(remove)
+                            if len(locations_list) > 0:
                                 middle = random.randint(*GameDetail.change_first_attendant_drag_middle)
                                 drag_time = random.randint(1000, 2000)
-                                CrackController.swipe(self.index, locations_list[count][0:2],
+                                CrackController.swipe(self.index, CrackController.cheat(locations_list[0]),
                                                       (x, y + middle), drag_time)
                                 count += 1
                                 CrackController.random_sleep()
@@ -869,6 +877,7 @@ class CrackService(Thread):
                                 CrackController.swipe(self.index, (right, height), (left, height), drag_time)
                                 count = 0
                                 CrackController.random_sleep()
+
         CrackController.random_sleep(2, 3)
         exist, location = CrackController.wait_picture(self.index, 1,
                                                        CrackController.share_path + 'prepare_flag.png')
