@@ -10,7 +10,7 @@ class CrackService(Thread):
     breakthrough_flag = False
     current_mode = None
     status_dict = {0: True, 1: True, 2: True, 3: True}
-    dont_want_to_breakthrough_list = [2]
+    dont_want_to_breakthrough_list = [0, 1]
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -544,7 +544,9 @@ class CrackService(Thread):
                 if template == 'Onmyoji_images\\challenge_victory.png':
                     times += 1
                     if mode == 'mitama':
-                        CrackController.random_sleep(20, 30)
+                        CrackController.random_sleep(2, 3)
+                        self._in_chapter_battle_new()
+
                     if mode == 'awake':
                         CrackController.random_sleep(15, 20)
                     if mode == 'imperial_spirit':
@@ -806,3 +808,69 @@ class CrackService(Thread):
                     CrackController.touch(self.index, CrackController.cheat(location))
         CrackController.random_sleep()
         self.any_pages_back_to_home_page()
+
+    def _in_chapter_battle_new(self) -> None:
+        count = 0
+        while True:
+            count += 1
+            screen = CrackController.screen_shot(self.index)
+            locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png')
+            CrackController.random_sleep()
+            if len(locations) > 0 or count > 3:
+                break
+        # exist, locations = CrackController.wait_picture(self.index, 10,
+        #                                                                CrackController.share_path + 'max.png')
+        # 查询满经验式神数量是否只有狗粮队长1个；
+        if len(locations) > 1:
+            # 双击指定区域，高视角切换低视角
+            CrackController.random_click(self.index, GameDetail.change_attendant_click_left_up,
+                                         GameDetail.change_attendant_click_right_down)
+            CrackController.random_click(self.index, GameDetail.change_attendant_click_left_up,
+                                         GameDetail.change_attendant_click_right_down)
+            CrackController.random_sleep(1.5, 3)
+            # 筛选N卡
+            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.champion_class)
+            if exist:
+                if template != 'Onmyoji_images\\N_class.png':
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                    CrackController.random_sleep()
+                    exist, location = CrackController.wait_picture(self.index, 1,
+                                                                   CrackController.share_path + 'N_class.png')
+                    if exist:
+                        CrackController.touch(self.index, CrackController.cheat(location))
+                        CrackController.random_sleep()
+
+            # 低视角查询满经验式神数量
+            screen = CrackController.screen_shot(self.index)
+            locations_list = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png')
+            # 简略的标识已经上场的狗粮
+            count = 0
+            if len(locations_list) != 0:
+                for x, y, w, h in locations_list:
+                    # 默认低视角最左边为队长
+                    if x > 150:
+                        while True:
+                            screen = CrackController.screen_shot(self.index)
+                            locations_list = CrackController.find_all_pictures(screen, CrackController.share_path +
+                                                                               'level_one_flag.png')
+                            if len(locations_list) > count:
+                                middle = random.randint(*GameDetail.change_first_attendant_drag_middle)
+                                drag_time = random.randint(1000, 2000)
+                                CrackController.swipe(self.index, locations_list[count][0:2],
+                                                      (x, y + middle), drag_time)
+                                count += 1
+                                CrackController.random_sleep()
+                                break
+                            else:
+                                height = random.randint(*GameDetail.chapter_backup_drag_height)
+                                left = random.randint(*GameDetail.chapter_backup_drag_left)
+                                right = random.randint(*GameDetail.chapter_backup_drag_right)
+                                drag_time = random.randint(1000, 2000)
+                                CrackController.swipe(self.index, (right, height), (left, height), drag_time)
+                                count = 0
+                                CrackController.random_sleep()
+        CrackController.random_sleep(2, 3)
+        exist, location = CrackController.wait_picture(self.index, 1,
+                                                       CrackController.share_path + 'prepare_flag.png')
+        if exist:
+            CrackController.touch(self.index, CrackController.cheat(location))

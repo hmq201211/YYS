@@ -9,20 +9,21 @@ from Crack_Onmyoji.log_recorder import LogRecorder
 def main():
     run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
-    c0 = CrackService(0, [['accept_invite', 'ybyls']])
-    c1 = CrackService(1, [['accept_invite', 'ybyls']])
-    c2 = CrackService(2,
-                      [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')], 17]])
-    c0.start()
-    c1.start()
-    c2.start()
-    c2.join()
-    c2 = CrackService(2,
-                      [['mitama_or_awake_invite', 'awake', 'thunder', [('cross', 'ybymq'), ('cross', 'xgrcey')], 13
-                        ]])
-    c2.start()
-    c2.join()
-    # c0.personal_break_through()
+    c0 = CrackService(0, [['accept_invite', 'tz']])
+    c1 = CrackService(1, [['accept_invite', 'tz']])
+    c1.solo_mode('mitama','original_fire',300)
+    # c1 = CrackService(1,
+    #                   [['mitama_or_awake_invite', 'mitama', '11', [('cross', 'xgrcey')], 200]])
+    # c0.start()
+    # c1.start()
+    # c2.start()
+    # c2.join()
+    # c2 = CrackService(2,
+    #                   [['mitama_or_awake_invite', 'awake', 'wind', [('cross', 'ybymq'), ('cross', 'xgrcey')], 1
+    #                     ]])
+    # c2.start()
+    # c2.join()
+    # c1.personal_break_through()
     # c0.group_break_through()
     # c0.open_close_buff('mitama', True)
     # c1 = CrackService(0, [['accept_invite']])

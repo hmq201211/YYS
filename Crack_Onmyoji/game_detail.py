@@ -26,6 +26,13 @@ class GameDetail:
     chapter_attendant_position_3_drag_height = (235, 325)
     chapter_attendant_position_3_stand_width = (240, 330)
     chapter_attendant_position_3_stand_height = (160, 320)
+
+    # 换狗粮高视角切换低视角，固定点击矩形区域,值为对角线定点坐标
+    change_attendant_click_left_up = (400, 400)
+    change_attendant_click_right_down = (600, 485)
+    # 高度误差补偿
+    change_first_attendant_drag_middle = (50, 65)
+
     break_through_word_left_up = (170, 520)
     break_through_word_right_down = (320, 570)
     break_through_sleep_left_up = (1040, 523)
