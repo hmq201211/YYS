@@ -814,7 +814,7 @@ class CrackService(Thread):
         while True:
             count += 1
             screen = CrackController.screen_shot(self.index)
-            locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png')
+            locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png', 0.65)
             CrackController.random_sleep()
             if len(locations) > 0 or count > 3:
                 break
@@ -842,7 +842,7 @@ class CrackService(Thread):
 
             # 低视角查询满经验式神数量
             screen = CrackController.screen_shot(self.index)
-            locations_list = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png')
+            locations_list = CrackController.find_all_pictures(screen, CrackController.share_path + 'max.png', 0.65)
             # 简略的标识已经上场的狗粮
             count = 0
             if len(locations_list) != 0:
@@ -852,7 +852,7 @@ class CrackService(Thread):
                         while True:
                             screen = CrackController.screen_shot(self.index)
                             locations_list = CrackController.find_all_pictures(screen, CrackController.share_path +
-                                                                               'level_one_flag.png')
+                                                                               'level_one_flag.png', 0.65)
                             if len(locations_list) > count:
                                 middle = random.randint(*GameDetail.change_first_attendant_drag_middle)
                                 drag_time = random.randint(1000, 2000)

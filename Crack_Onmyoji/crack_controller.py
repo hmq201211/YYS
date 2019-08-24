@@ -259,7 +259,7 @@ class CrackController:
 
     # find the matched picture, assuming the player is running
     @staticmethod
-    def find_all_pictures(screen_shot: list, template: str, threshold: float = 0.65, debug: bool = False) -> \
+    def find_all_pictures(screen_shot: list, template: str, threshold: float = 0.85, debug: bool = False) -> \
             [(int, int, int, int)]:
         locations_to_return = []
         template_picture = CrackController.templates_dict.get(template)
@@ -331,7 +331,7 @@ class CrackController:
 
     # wait for specified picture, assuming the player is running
     @staticmethod
-    def wait_picture(index: int, timeout: int, template: str, threshold: float = 0.65, sleep_time_low: float = 0.4,
+    def wait_picture(index: int, timeout: int, template: str, threshold: float = 0.85, sleep_time_low: float = 0.4,
                      sleep_time_high: float = 0.6) -> (bool, (int, int, int, int)):
 
         count = 0
