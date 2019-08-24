@@ -10,7 +10,7 @@ class CrackService(Thread):
     breakthrough_flag = False
     current_mode = None
     status_dict = {0: True, 1: True, 2: True, 3: True}
-    dont_want_to_breakthrough_list = [0, 1]
+    dont_want_to_breakthrough_list = [0, 1, 2]
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -74,7 +74,8 @@ class CrackService(Thread):
                 if all_ready:
                     break
             CrackService.current_mode = mode
-            self.open_close_buff(mode, True)
+            if not change_champion:
+                self.open_close_buff(mode, True)
             CrackController.random_sleep(2, 3)
             self._invite_friend_to_team(mode, addition_arg, column_name_list)
             CrackController.random_sleep(1.5, 3)
@@ -189,7 +190,8 @@ class CrackService(Thread):
                 CrackService.status_dict[self.index] = True
             else:
                 if CrackService.current_mode is not None and not buff_status_dict.get(CrackService.current_mode):
-                    self.open_close_buff(CrackService.current_mode, True)
+                    if not change_champion:
+                        self.open_close_buff(CrackService.current_mode, True)
                     buff_status_dict[CrackService.current_mode] = True
             if time.time() - accept_time > timer:
                 if CrackService.current_mode is not None:
