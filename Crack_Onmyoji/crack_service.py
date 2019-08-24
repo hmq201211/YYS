@@ -208,6 +208,7 @@ class CrackService(Thread):
                                                                     'battle_victory.png')
             if is_team_leader > 0:
                 self.leave_team()
+                self.any_pages_back_to_home_page()
                 continue
             inviter_location, exist = CrackController.find_single_picture(screen,
                                                                           CrackController.share_path + "invite\\check_"
@@ -752,7 +753,6 @@ class CrackService(Thread):
                                                            "team_confirm_leave.png")
                 CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep()
-        self.any_pages_back_to_home_page()
 
     def detour_to_explore_page(self):
         self.any_pages_back_to_home_page()
