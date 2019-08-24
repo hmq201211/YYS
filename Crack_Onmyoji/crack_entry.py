@@ -11,7 +11,8 @@ def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     c0 = CrackService(0, [['accept_invite', 'tz']])
     c1 = CrackService(1, [['accept_invite', 'tz']])
-    c0.solo_mode("mitama", "original_fire", 100)
+    c0._in_chapter_battle_new(True)
+    # c0.solo_mode("mitama", "original_fire", 100)
     # c1 = CrackService(1,
     #                   [['mitama_or_awake_invite', 'mitama', '11', [('cross', 'xgrcey')], 200]])
     # c0.start()

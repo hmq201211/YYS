@@ -61,7 +61,7 @@ class CrackService(Thread):
                     print("not found ...")
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)],
-                               count: int = 10000) -> bool:
+                               count: int = 10000, change_champion: bool = False, is_leader: bool = False) -> bool:
         count_to_breakthrough = 120
         for i in range(math.ceil(count / count_to_breakthrough)):
             while True:
@@ -79,7 +79,8 @@ class CrackService(Thread):
             self._invite_friend_to_team(mode, addition_arg, column_name_list)
             CrackController.random_sleep(1.5, 3)
             accomplish = self.send_invite(column_name_list,
-                                          count_to_breakthrough if count_to_breakthrough < count else count)
+                                          count_to_breakthrough if count_to_breakthrough < count else count,
+                                          change_champion, is_leader)
             if accomplish:
                 CrackService.breakthrough_flag = True
                 self.leave_team()
@@ -98,7 +99,8 @@ class CrackService(Thread):
         self.open_close_buff(mode, False)
         return True
 
-    def send_invite(self, column_name_list: [(str, str)] = None, count: int = 10000) -> bool:
+    def send_invite(self, column_name_list: [(str, str)] = None, count: int = 10000, change_champion: bool = False,
+                    is_leader: bool = False) -> bool:
         battle_count = 0
         auto_send_invite = False
         failure_count = 0
@@ -149,12 +151,16 @@ class CrackService(Thread):
                     else:
                         self._invite(column_name_list)
                     CrackController.touch(self.index, CrackController.cheat(location))
-                    CrackController.random_sleep(15, 20)
+                    CrackController.random_sleep(3, 5)
+                    if change_champion:
+                        self._in_chapter_battle_new(is_leader)
+                        CrackController.random_sleep(100, 120)
                 else:
                     CrackController.touch(self.index, CrackController.cheat(location))
             CrackController.random_sleep(1, 2)
 
-    def accept_invite(self, inviter: str, timer: int = 60 * 60 * 6) -> bool:
+    def accept_invite(self, inviter: str, timer: int = 60 * 60 * 6, change_champion: bool = False,
+                      is_leader: bool = False) -> bool:
         accept_time = time.time()
         buff_status_dict = {"mitama": False, "awake": False}
         while True:
@@ -179,6 +185,12 @@ class CrackService(Thread):
                     self.open_close_buff(CrackService.current_mode, False)
                 return True
             screen = CrackController.screen_shot(self.index)
+            exist, _ = CrackController.find_single_picture(screen, CrackController.share_path +
+                                                           'prepare_flag.png')
+            if exist:
+                if change_champion:
+                    self._in_chapter_battle_new(is_leader)
+                    CrackController.random_sleep(100, 120)
             _, is_team_leader = CrackController.find_single_picture(screen, CrackController.share_path +
                                                                     'battle_victory.png')
             if is_team_leader > 0:
@@ -816,7 +828,7 @@ class CrackService(Thread):
         CrackController.random_sleep()
         self.any_pages_back_to_home_page()
 
-    def _in_chapter_battle_new(self) -> None:
+    def _in_chapter_battle_new(self, is_leader: bool = False) -> None:
         count = 0
         while True:
             count += 1
@@ -826,7 +838,7 @@ class CrackService(Thread):
             CrackController.random_sleep()
             if len(locations) > 0 or count > 3:
                 break
-        if len(locations) > 1:
+        if not is_leader and len(locations) > 0 or is_leader and len(locations) > 1:
             # 双击指定区域，高视角切换低视角
             CrackController.random_click(self.index, GameDetail.change_attendant_click_left_up,
                                          GameDetail.change_attendant_click_right_down)
@@ -849,40 +861,41 @@ class CrackService(Thread):
             screen = CrackController.screen_shot(self.index)
             locations_list = CrackController.find_all_pictures(screen,
                                                                CrackController.share_path + 'max_level_flag2.png', 0.65)
+            locations_list = sorted(locations_list, key=lambda loc: loc[0])
+            if is_leader:
+                locations_list = locations_list[1:]
             if len(locations_list) != 0:
                 for x, y, w, h in locations_list:
                     # 默认低视角最左边为队长
-                    if x > 150:
-                        while True:
-                            screen = CrackController.screen_shot(self.index)
-                            locations_list = CrackController.find_all_pictures(screen, CrackController.share_path +
-                                                                               'level_one_flag.png')
-                            remove_locations_list = CrackController.find_all_pictures(screen,
-                                                                                      CrackController.share_path +
-                                                                                      'backup_in_team_flag.png')
-                            if len(remove_locations_list) > 0:
-                                to_remove = []
-                                for location in locations_list:
-                                    for remove in remove_locations_list:
-                                        if location[0] in range(remove[0] - 100, remove[0]):
-                                            to_remove.append(location)
-                                for remove in to_remove:
-                                    locations_list.remove(remove)
-                            if len(locations_list) > 0:
-                                middle = random.randint(*GameDetail.change_first_attendant_drag_middle)
-                                drag_time = random.randint(1000, 2000)
-                                CrackController.swipe(self.index, CrackController.cheat(locations_list[-1]),
-                                                      (x, y + middle), drag_time)
-                                CrackController.random_sleep()
-                                break
-                            else:
-                                height = random.randint(*GameDetail.chapter_backup_drag_height)
-                                left = random.randint(*GameDetail.chapter_backup_drag_left)
-                                right = random.randint(*GameDetail.chapter_backup_drag_right)
-                                drag_time = random.randint(1000, 2000)
-                                CrackController.swipe(self.index, (right, height), (left, height), drag_time)
-                                count = 0
-                                CrackController.random_sleep()
+                    while True:
+                        screen = CrackController.screen_shot(self.index)
+                        locations_list = CrackController.find_all_pictures(screen, CrackController.share_path +
+                                                                           'level_one_flag.png')
+                        remove_locations_list = CrackController.find_all_pictures(screen,
+                                                                                  CrackController.share_path +
+                                                                                  'backup_in_team_flag.png')
+                        if len(remove_locations_list) > 0:
+                            to_remove = []
+                            for location in locations_list:
+                                for remove in remove_locations_list:
+                                    if location[0] in range(remove[0] - 100, remove[0]):
+                                        to_remove.append(location)
+                            for remove in to_remove:
+                                locations_list.remove(remove)
+                        if len(locations_list) > 0:
+                            middle = random.randint(*GameDetail.change_first_attendant_drag_middle)
+                            drag_time = random.randint(1000, 2000)
+                            CrackController.swipe(self.index, CrackController.cheat(locations_list[-1]),
+                                                  (x, y + middle), drag_time)
+                            CrackController.random_sleep()
+                            break
+                        else:
+                            height = random.randint(*GameDetail.chapter_backup_drag_height)
+                            left = random.randint(*GameDetail.chapter_backup_drag_left)
+                            right = random.randint(*GameDetail.chapter_backup_drag_right)
+                            drag_time = random.randint(1000, 2000)
+                            CrackController.swipe(self.index, (right, height), (left, height), drag_time)
+                            CrackController.random_sleep()
 
         CrackController.random_sleep(2, 3)
         exist, location = CrackController.wait_picture(self.index, 1,
