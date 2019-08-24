@@ -546,11 +546,18 @@ class CrackService(Thread):
                     if mode == 'mitama':
                         CrackController.random_sleep(2, 3)
                         self._in_chapter_battle_new()
-
                     if mode == 'awake':
                         CrackController.random_sleep(15, 20)
                     if mode == 'imperial_spirit':
                         CrackController.random_sleep(55, 65)
+                if template == 'Onmyoji_images\\fail_victory.png':
+                    if mode == "mitama":
+                        CrackController.random_sleep(3, 5)
+                        exist, location = CrackController.wait_picture(self.index, 3,
+                                                                       CrackController.share_path
+                                                                       + "original_fire_3.png")
+                        if exist:
+                            CrackController.touch(self.index, CrackController.cheat(location))
 
     def chapter_solo(self) -> None:
 
@@ -864,9 +871,8 @@ class CrackService(Thread):
                             if len(locations_list) > 0:
                                 middle = random.randint(*GameDetail.change_first_attendant_drag_middle)
                                 drag_time = random.randint(1000, 2000)
-                                CrackController.swipe(self.index, CrackController.cheat(locations_list[0]),
+                                CrackController.swipe(self.index, CrackController.cheat(locations_list[-1]),
                                                       (x, y + middle), drag_time)
-                                count += 1
                                 CrackController.random_sleep()
                                 break
                             else:
