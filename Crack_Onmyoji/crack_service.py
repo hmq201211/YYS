@@ -198,9 +198,9 @@ class CrackService(Thread):
                     self.open_close_buff(CrackService.current_mode, False)
                 return True
             screen = CrackController.screen_shot(self.index)
-            exist, _ = CrackController.find_single_picture(screen, CrackController.share_path +
+            _, exist = CrackController.find_single_picture(screen, CrackController.share_path +
                                                            'prepare_flag.png')
-            if exist:
+            if exist > 0:
                 if change_champion:
                     self._in_chapter_battle_new(is_leader)
                     CrackController.random_sleep(100, 120)
