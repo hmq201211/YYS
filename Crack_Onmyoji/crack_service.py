@@ -119,22 +119,33 @@ class CrackService(Thread):
                         failure_count += 1
                         CrackController.touch(self.index, CrackController.cheat(location))
                 elif template == 'Onmyoji_images\\6_victory.png':
-                    if not auto_send_invite:
+                    if change_champion:
                         exist, location = CrackController.wait_picture(
                             self.index, 1,
                             CrackController.share_path + 'invite_in_default.png')
                         if exist:
-                            CrackController.touch(self.index, CrackController.cheat(location))
                             exist, location = CrackController.wait_picture(
                                 self.index, 1,
                                 CrackController.share_path + 'invite_in_default_confirm.png')
                             if exist:
                                 CrackController.touch(self.index, CrackController.cheat(location))
-                                auto_send_invite = True
                     else:
-                        failure_count += 1
-                        auto_send_invite = False
-                        CrackController.touch(self.index, CrackController.cheat(location))
+                        if not auto_send_invite:
+                            exist, location = CrackController.wait_picture(
+                                self.index, 1,
+                                CrackController.share_path + 'invite_in_default.png')
+                            if exist:
+                                CrackController.touch(self.index, CrackController.cheat(location))
+                                exist, location = CrackController.wait_picture(
+                                    self.index, 1,
+                                    CrackController.share_path + 'invite_in_default_confirm.png')
+                                if exist:
+                                    CrackController.touch(self.index, CrackController.cheat(location))
+                                    auto_send_invite = True
+                        else:
+                            failure_count += 1
+                            auto_send_invite = False
+                            CrackController.touch(self.index, CrackController.cheat(location))
                 elif template == 'Onmyoji_images\\battle_victory.png':
                     if battle_count >= count:
                         return True
@@ -202,7 +213,7 @@ class CrackService(Thread):
             if exist > 0:
                 all_locations = CrackController.find_all_pictures(screen,
                                                                   CrackController.share_path + "team2_invite.png")
-                if len(all_locations) > 0:
+                if not change_champion and len(all_locations) > 0:
                     CrackController.touch(self.index, CrackController.cheat(all_locations[0]))
                 else:
                     all_locations = CrackController.find_all_pictures(screen,
