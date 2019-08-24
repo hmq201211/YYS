@@ -166,7 +166,7 @@ class CrackService(Thread):
                     CrackController.random_sleep(3, 5)
                     if change_champion:
                         self._in_chapter_battle_new(is_leader)
-                        CrackController.random_sleep(100, 120)
+                        CrackController.random_sleep(90, 110)
                 else:
                     CrackController.touch(self.index, CrackController.cheat(location))
             CrackController.random_sleep(1, 2)
@@ -203,7 +203,7 @@ class CrackService(Thread):
             if exist > 0:
                 if change_champion:
                     self._in_chapter_battle_new(is_leader)
-                    CrackController.random_sleep(100, 120)
+                    CrackController.random_sleep(90, 110)
             _, is_team_leader = CrackController.find_single_picture(screen, CrackController.share_path +
                                                                     'battle_victory.png')
             if is_team_leader > 0:
