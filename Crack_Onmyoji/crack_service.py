@@ -62,7 +62,7 @@ class CrackService(Thread):
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)],
                                count: int = 10000) -> bool:
-        count_to_breakthrough = 50
+        count_to_breakthrough = 120
         for i in range(math.ceil(count / count_to_breakthrough)):
             while True:
                 all_ready = True
