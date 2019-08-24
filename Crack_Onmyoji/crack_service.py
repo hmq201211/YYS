@@ -113,6 +113,8 @@ class CrackService(Thread):
                 if template == 'Onmyoji_images\\game_failure_victory.png':
                     return False
                 elif template == 'Onmyoji_images\\fail_victory.png':
+                    CrackController.random_click(self.index, CrackController.cheat(location))
+                    CrackController.random_sleep()
                     exist, location = CrackController.wait_picture(self.index, 1,
                                                                    CrackController.share_path + "6_victory.png")
                     if exist:
