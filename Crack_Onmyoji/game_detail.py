@@ -32,6 +32,9 @@ class GameDetail:
     change_attendant_click_right_down = (600, 485)
     # 高度误差补偿
     change_first_attendant_drag_middle = (50, 65)
+    # 魂十第一个位置
+    mitama_level_10_first_position_width = (45, 90)
+    mitama_level_10_first_position_height = (306, 319)
 
     break_through_word_left_up = (170, 520)
     break_through_word_right_down = (320, 570)

@@ -877,8 +877,14 @@ class CrackService(Thread):
             locations_list = sorted(locations_list, key=lambda loc: loc[0])
             if is_leader:
                 locations_list = locations_list[1:]
+            else:
+                if len(locations_list) == 0:
+                    x = random.randint(*GameDetail.mitama_level_10_first_position_width)
+                    y = random.randint(*GameDetail.mitama_level_10_first_position_height)
+                    locations_list.append((x, y, 0, 0))
+
             if len(locations_list) != 0:
-                for x, y, w, h in locations_list:
+                for x, y, _, _ in locations_list:
                     # 默认低视角最左边为队长
                     while True:
                         screen = CrackController.screen_shot(self.index)
