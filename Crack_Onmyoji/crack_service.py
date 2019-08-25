@@ -214,7 +214,7 @@ class CrackService(Thread):
                 continue
             inviter_location, exist = CrackController.find_single_picture(screen,
                                                                           CrackController.share_path + "invite\\check_"
-                                                                          + inviter + ".png")
+                                                                          + inviter + ".png", 0.2)
             if exist > 0:
                 all_locations = CrackController.find_all_pictures(screen,
                                                                   CrackController.share_path + "team2_invite.png")
@@ -573,7 +573,7 @@ class CrackService(Thread):
                     times += 1
                     if mode == 'mitama':
                         CrackController.random_sleep(2, 3)
-                        self._in_chapter_battle_new()
+                        self._in_chapter_battle_new(True)
                     if mode == 'awake':
                         CrackController.random_sleep(15, 20)
                     if mode == 'imperial_spirit':
