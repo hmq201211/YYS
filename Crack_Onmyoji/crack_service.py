@@ -854,6 +854,7 @@ class CrackService(Thread):
             if len(locations) > 0 or count > 3:
                 break
         if not is_leader and len(locations) > 0 or is_leader and len(locations) > 1:
+            count = len(locations) if not is_leader else len(locations) - 1
             # 双击指定区域，高视角切换低视角
             CrackController.random_click(self.index, GameDetail.change_attendant_click_left_up,
                                          GameDetail.change_attendant_click_right_down)
@@ -880,7 +881,7 @@ class CrackService(Thread):
             if is_leader:
                 locations_list = locations_list[1:]
             else:
-                if len(locations_list) == 0:
+                if len(locations_list) != count:
                     x = random.randint(*GameDetail.mitama_level_10_first_position_width)
                     y = random.randint(*GameDetail.mitama_level_10_first_position_height)
                     locations_list.append((x, y, 0, 0))
