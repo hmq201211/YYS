@@ -214,7 +214,7 @@ class CrackService(Thread):
                 continue
             inviter_location, exist = CrackController.find_single_picture(screen,
                                                                           CrackController.share_path + "invite\\check_"
-                                                                          + inviter + ".png", 0.2)
+                                                                          + inviter + ".png")
             if exist > 0:
                 all_locations = CrackController.find_all_pictures(screen,
                                                                   CrackController.share_path + "team2_invite.png")
