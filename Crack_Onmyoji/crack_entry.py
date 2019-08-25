@@ -11,12 +11,13 @@ def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     c0 = CrackService(0, [["personal_break_through"], ["group_break_through"]])
     c1 = CrackService(1, [["personal_break_through"], ["group_break_through"]])
+    c0._in_chapter_battle_new(True)
     # c0 = CrackService(0, [['accept_invite', 'ybyls']])
     # c1 = CrackService(1, [['accept_invite', 'ybyls']])
     # c2 = CrackService(2,
     #                   [['mitama_or_awake_invite', 'mitama', '11', [('cross', 'xgrcey'), ('cross', 'ybymq')], 17]])
-    c0.start()
-    c1.start()
+    # c0.start()
+    # c1.start()
     # c2.start()
     # c2.join()
     # c2 = CrackService(2,

@@ -865,7 +865,7 @@ class CrackService(Thread):
             if exist:
                 if template != 'Onmyoji_images\\N_class.png':
                     CrackController.touch(self.index, CrackController.cheat(location))
-                    CrackController.random_sleep()
+                    CrackController.random_sleep(0.5, 0.8)
                     exist, location = CrackController.wait_picture(self.index, 1,
                                                                    CrackController.share_path + 'N_class.png')
                     if exist:
@@ -884,7 +884,7 @@ class CrackService(Thread):
                     x = random.randint(*GameDetail.mitama_level_10_first_position_width)
                     y = random.randint(*GameDetail.mitama_level_10_first_position_height)
                     locations_list.append((x, y, 0, 0))
-
+            print(len(locations_list))
             if len(locations_list) != 0:
                 for x, y, _, _ in locations_list:
                     # 默认低视角最左边为队长
@@ -911,13 +911,15 @@ class CrackService(Thread):
                             CrackController.random_sleep()
                             break
                         else:
-                            height = random.randint(*GameDetail.chapter_backup_drag_height)
-                            left = random.randint(*GameDetail.chapter_backup_drag_left)
-                            right = random.randint(*GameDetail.chapter_backup_drag_right)
-                            drag_time = random.randint(1000, 2000)
-                            CrackController.swipe(self.index, (right, height), (left, height), drag_time)
+                            location, exist = CrackController.find_single_picture(screen,
+                                                                                  CrackController.share_path
+                                                                                  + "back_up_scroll.png", 0.65)
+                            if exist > 0:
+                                drag_time = random.randint(1000, 2000)
+                                width = random.randint(200, 300)
+                                (x_n, y_n) = CrackController.cheat(location)
+                                CrackController.swipe(self.index, (x_n, y_n), (x_n + width, y_n), drag_time)
                             CrackController.random_sleep()
-
         CrackController.random_sleep(2, 3)
         exist, location = CrackController.wait_picture(self.index, 1,
                                                        CrackController.share_path + 'prepare_flag.png')
