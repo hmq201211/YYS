@@ -35,7 +35,10 @@ class CrackService(Thread):
 
     def start_onmyoji(self) -> None:
         if CrackController.is_player_running(self.index):
-            CrackController.reboot_player_and_start_app(self.index, GameDetail.game_package_name)
+            # CrackController.reboot_player_and_start_app(self.index, GameDetail.game_package_name)
+            CrackController.stop_app(self.index, GameDetail.game_package_name)
+            CrackController.random_sleep()
+            CrackController.invoke_app(self.index, GameDetail.game_package_name)
         else:
             CrackController.launch_player_and_start_app(self.index, GameDetail.game_package_name)
         CrackController.random_sleep(10, 15)
