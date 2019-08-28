@@ -405,9 +405,8 @@ class CrackService(Thread):
                     CrackController.touch(self.index, CrackController.cheat(location))
                     CrackController.random_sleep()
                 screen = CrackController.screen_shot(self.index)
-                locations = CrackController.find_all_pictures(
-                    screen,
-                    CrackController.share_path + 'broken2_flag.png', 0.7)
+                locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'broken2_flag.png',
+                                                              0.7)
                 print('beat' + str(len(locations)))
                 if len(locations) >= 3:
                     refresh = True
@@ -428,6 +427,7 @@ class CrackService(Thread):
                     if len(click_locations) > 0:
                         click_position = click_locations[random.randint(0, len(click_locations) - 1)]
                     else:
+                        ticket -= len(locations)
                         refresh = True
                 if not refresh:
                     CrackController.touch(self.index, CrackController.cheat(click_position))
