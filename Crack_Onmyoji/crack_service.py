@@ -10,7 +10,7 @@ class CrackService(Thread):
     breakthrough_flag = False
     current_mode = None
     status_dict = {0: True, 1: True, 2: True, 3: True}
-    dont_want_to_breakthrough_list = [0, 1, 2]
+    dont_want_to_breakthrough_list = [2]
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
