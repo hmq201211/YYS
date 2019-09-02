@@ -8,7 +8,6 @@ import time
 import cv2
 import numpy
 import requests
-import win32com.client
 from Crack_Onmyoji.game_detail import GameDetail
 from Crack_Onmyoji.template_loader import TemplateLoader
 from Crack_Onmyoji.player_detail import PlayerDetail
@@ -16,7 +15,6 @@ from Crack_Onmyoji.player_detail import PlayerDetail
 
 class CrackController:
     share_path = 'Onmyoji_images\\'
-    speak_out = win32com.client.Dispatch('SAPI.SPVOICE')
     conf = configparser.ConfigParser()
     file_path = './instruction/config.txt'
     conf.read(file_path)
@@ -418,11 +416,6 @@ class CrackController:
     def random_sleep(start: float = 0.8, end: float = 1.2) -> None:
         sec = random.uniform(start, end)
         time.sleep(sec)
-
-    # use windows api to speak out some words
-    @staticmethod
-    def speak(word: str) -> None:
-        CrackController.speak_out.Speak(word)
 
     # click different location to avoid game detection
     @staticmethod
