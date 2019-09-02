@@ -10,7 +10,7 @@ class CrackService(Thread):
     breakthrough_flag = False
     current_mode = None
     status_dict = {0: True, 1: True, 2: True, 3: True}
-    dont_want_to_breakthrough_list = [2]
+    dont_want_to_breakthrough_list = [2, 3]
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -571,7 +571,7 @@ class CrackService(Thread):
                 break
             screen = CrackController.screen_shot(self.index)
             location, exist = CrackController.find_single_picture(screen,
-                                                                  CrackController.share_path + "prepare_flg.png")
+                                                                  CrackController.share_path + "prepare_flag.png")
             if exist > 0:
                 self._in_chapter_battle_new(True)
             exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory,
