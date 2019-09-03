@@ -211,9 +211,9 @@ class CrackController:
     # fetch current activity xml, assuming the player is running
     @staticmethod
     def get_cur_activity_xml(index: int) -> str:
-        CrackController.ld_cmd(index, 'uiautomator dump /sdcard/Pictures/activity.xml')
+        CrackController.ld_cmd(index, 'uiautomator dump /sdcard/Pictures/' + str(index) + 'activity.xml')
         CrackController.random_sleep()
-        file = open(CrackController.share_path + 'activity.xml', 'r', encoding='utf-8')
+        file = open(CrackController.share_path + str(index) + 'activity.xml', 'r', encoding='utf-8')
         result = file.read()
         file.close()
         return result

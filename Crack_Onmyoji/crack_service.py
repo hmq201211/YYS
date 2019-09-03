@@ -567,6 +567,7 @@ class CrackService(Thread):
                 CrackController.random_sleep(1.5, 3)
         times = 0
         while True:
+            CrackController.random_sleep()
             if times > count:
                 break
             screen = CrackController.screen_shot(self.index)
@@ -574,8 +575,7 @@ class CrackService(Thread):
                                                                   CrackController.share_path + "prepare_flag.png")
             if exist > 0:
                 self._in_chapter_battle_new(True)
-            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory,
-                                                                           screen=screen)
+            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
             if exist:
                 CrackController.touch(self.index, CrackController.cheat(location))
                 if template == 'Onmyoji_images\\challenge_victory.png':
