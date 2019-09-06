@@ -921,7 +921,6 @@ class CrackService(Thread):
                             CrackController.random_sleep()
                             break
                         else:
-                            screen = CrackController.screen_shot(self.index)
                             location, exist = CrackController.find_single_picture(screen,
                                                                                   CrackController.share_path
                                                                                   + "back_up_scroll.png", 0.65)
