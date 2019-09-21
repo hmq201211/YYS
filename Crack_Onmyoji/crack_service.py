@@ -937,8 +937,14 @@ class CrackService(Thread):
         if exist:
             CrackController.touch(self.index, CrackController.cheat(location))
 
+    def _skip_task_invite(self) -> None:
+        exist, location = CrackController.wait_picture(self.index, 1, CrackController.share_path + '5_victory.png')
+        if exist:
+            CrackController.touch(self.index, CrackController.cheat(location))
+
     def monopoly(self):
-        def _pick_card() -> [(int, int, int, int)]:
+        def _pick_card() -> (int, int, int, int):
+            self._skip_task_invite()
             gap_line = [(200, 300), (330, 400), (460, 500), (590, 650)]
             left_right_flag = [(240, 250), (1150, 1160)]
             screen = CrackController.screen_shot(self.index)
@@ -956,9 +962,127 @@ class CrackService(Thread):
                     choose_row[0]
             else:
                 valid_rows = len(result_dict)
+                if valid_rows == 0:
+                    return None
                 if result_dict.get(0) is None:
                     choose_row = result_dict.get(4 - valid_rows)
                 else:
                     choose_row = result_dict.get(valid_rows - 1)
                 to_return = choose_row[random.randint(0, len(choose_row) - 1)]
             return to_return
+
+        def _loot() -> None:
+            check_pic_list = [CrackController.share_path + '2_victory.png',
+                              CrackController.share_path + '3_victory.png',
+                              CrackController.share_path + 'new_activity\\gift_box.png',
+                              CrackController.share_path + 'new_activity\\gift_eye.png',
+                              CrackController.share_path + 'new_activity\\gift_moon.png']
+            scan_count = 0
+            while True:
+                self._skip_task_invite()
+                CrackController.random_sleep()
+                exist, location, _ = CrackController.check_picture_list(self.index, check_pic_list)
+                if exist:
+                    scan_count = 0
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                else:
+                    scan_count += 1
+                if scan_count >= 5:
+                    break
+
+        def _buy_tickets() -> None:
+            self._skip_task_invite()
+            exist, location = CrackController.wait_picture(self.index, 1,
+                                                           CrackController.share_path +
+                                                           'new_activity\\buy_tickets_hint.png')
+            if exist:
+                exist, location = CrackController.wait_picture(self.index, 1,
+                                                               CrackController.share_path +
+                                                               'new_activity\\buy_tickets_up_bound.png')
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                    CrackController.random_sleep()
+                    exist, location = CrackController.wait_picture(self.index, 1,
+                                                                   CrackController.share_path +
+                                                                   'new_activity\\buy_tickets_confirm.png')
+                    if exist:
+                        CrackController.touch(self.index, CrackController.cheat(location))
+                        _loot()
+
+        def _choose_mitama() -> None:
+            self._skip_task_invite()
+            exist, location = CrackController.wait_picture(self.index, 1,
+                                                           CrackController.share_path +
+                                                           'new_activity\\choose_mitama.png')
+            if exist:
+                _buy_tickets()
+                exist, location = CrackController.wait_picture(self.index, 3,
+                                                               CrackController.share_path +
+                                                               'new_activity\\choose_mitama_hint.png')
+                if exist:
+                    exist, location = CrackController.wait_picture(self.index, 1,
+                                                                   CrackController.share_path +
+                                                                   'new_activity\\choose_mitama_confirm.png')
+                    if exist:
+                        CrackController.touch(self.index, CrackController.cheat(location))
+
+        def _enter_next_level() -> None:
+            self._skip_task_invite()
+            exist, location = CrackController.wait_picture(self.index, 1,
+                                                           CrackController.share_path +
+                                                           'new_activity\\enter_next_level_hint.png')
+            if exist:
+                exist, location = CrackController.wait_picture(self.index, 1,
+                                                               CrackController.share_path +
+                                                               'new_activity\\enter_next_level_confirm.png')
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                    CrackController.random_sleep(2, 3)
+                    _choose_mitama()
+
+        def _battle() -> None:
+            self._skip_task_invite()
+            exist, _ = CrackController.wait_picture(self.index, 1,
+                                                    CrackController.share_path +
+                                                    'new_activity\\ready_to_battle_flag.png')
+            if exist:
+                exist, click = CrackController.wait_picture(self.index, 1,
+                                                            CrackController.share_path +
+                                                            'new_activity\\begin_battle.png')
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(click))
+                    _buy_tickets()
+                    CrackController.random_sleep(20, 30)
+                    while True:
+                        exist, click, _ = CrackController.check_picture_list(self.index,
+                                                                             GameDetail.victory)
+                        if exist:
+                            CrackController.touch(self.index, CrackController.cheat(click))
+                        CrackController.random_sleep()
+                        exist, _ = CrackController.wait_picture(self.index, 1,
+                                                                CrackController.share_path +
+                                                                'new_activity\\flip_gap_page_flag.png')
+                        if exist:
+                            break
+
+        while True:
+            self._skip_task_invite()
+            click_loc = _pick_card()
+            if click_loc is None:
+                _loot()
+                exist_loc, click_loc = CrackController.wait_picture(self.index, 1,
+                                                                    CrackController.share_path +
+                                                                    'new_activity\\next_level_door.png')
+                if exist_loc:
+                    CrackController.touch(self.index, CrackController.cheat(click_loc))
+                    CrackController.random_sleep()
+                    _battle()
+                    _enter_next_level()
+            else:
+                CrackController.touch(self.index, CrackController.cheat(click_loc))
+                CrackController.random_sleep()
+                _battle()
+
+
+c0 = CrackService(0)
+c0.monopoly()
