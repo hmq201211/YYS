@@ -937,26 +937,28 @@ class CrackService(Thread):
         if exist:
             CrackController.touch(self.index, CrackController.cheat(location))
 
-
-gap_line = [(200, 300), (330, 400), (460, 500), (590, 650)]
-left_right_flag = [(240, 250), (1150, 1160)]
-
-screen = CrackController.screen_shot(0)
-locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'new_activity\\gap.png')
-locations.sort(key=lambda x: x[1])
-result_dict = defaultdict(list)
-for location in locations:
-    for index, gap in enumerate(gap_line):
-        if location[1] in range(*gap):
-            result_dict[index].append(location)
-if len(result_dict) == 4:
-    choose_row = result_dict.get(0) if len(result_dict.get(0)) < len(result_dict.get(3)) else result_dict.get(3)
-    to_return = choose_row[len(choose_row) - 1] if choose_row[0][0] in range(*left_right_flag[0]) else choose_row[0]
-else:
-    valid_rows = len(result_dict)
-    if result_dict.get(0) is None:
-        choose_row = result_dict.get(4 - valid_rows)
-    else:
-        choose_row = result_dict.get(valid_rows - 1)
-    to_return = choose_row[random.randint(0, len(choose_row) - 1)]
-print(to_return)
+    def monopoly(self):
+        def _pick_card() -> [(int, int, int, int)]:
+            gap_line = [(200, 300), (330, 400), (460, 500), (590, 650)]
+            left_right_flag = [(240, 250), (1150, 1160)]
+            screen = CrackController.screen_shot(self.index)
+            locations = CrackController.find_all_pictures(screen, CrackController.share_path + 'new_activity\\gap.png')
+            locations.sort(key=lambda x: x[1])
+            result_dict = defaultdict(list)
+            for location in locations:
+                for index, gap in enumerate(gap_line):
+                    if location[1] in range(*gap):
+                        result_dict[index].append(location)
+            if len(result_dict) == 4:
+                choose_row = result_dict.get(0) if len(result_dict.get(0)) < len(
+                    result_dict.get(3)) else result_dict.get(3)
+                to_return = choose_row[len(choose_row) - 1] if choose_row[0][0] in range(*left_right_flag[0]) else \
+                    choose_row[0]
+            else:
+                valid_rows = len(result_dict)
+                if result_dict.get(0) is None:
+                    choose_row = result_dict.get(4 - valid_rows)
+                else:
+                    choose_row = result_dict.get(valid_rows - 1)
+                to_return = choose_row[random.randint(0, len(choose_row) - 1)]
+            return to_return
