@@ -1028,16 +1028,16 @@ class CrackService(Thread):
 
         def _enter_next_level() -> None:
             self._skip_task_invite()
-            exist, location = CrackController.wait_picture(self.index, 1,
+            exist, location = CrackController.wait_picture(self.index, 3,
                                                            CrackController.share_path +
                                                            'new_activity\\enter_next_level_hint.png')
             if exist:
-                exist, location = CrackController.wait_picture(self.index, 1,
+                exist, location = CrackController.wait_picture(self.index, 3,
                                                                CrackController.share_path +
                                                                'new_activity\\enter_next_level_confirm.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
-                    CrackController.random_sleep(2, 3)
+                    CrackController.random_sleep(4, 5)
                     _choose_mitama()
 
         def _battle() -> None:
@@ -1075,12 +1075,12 @@ class CrackService(Thread):
                                                                     'new_activity\\next_level_door.png')
                 if exist_loc:
                     CrackController.touch(self.index, CrackController.cheat(click_loc))
-                    CrackController.random_sleep()
+                    CrackController.random_sleep(2, 3)
                     _battle()
                     _enter_next_level()
             else:
                 CrackController.touch(self.index, CrackController.cheat(click_loc))
-                CrackController.random_sleep()
+                CrackController.random_sleep(2, 3)
                 _battle()
 
 
