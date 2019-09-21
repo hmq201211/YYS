@@ -955,6 +955,8 @@ class CrackService(Thread):
                 for index, gap in enumerate(gap_line):
                     if location[1] in range(*gap):
                         result_dict[index].append(location)
+            for k, v in result_dict.items():
+                v.sort(key=lambda x: x[0])
             if len(result_dict) == 4:
                 choose_row = result_dict.get(0) if len(result_dict.get(0)) < len(
                     result_dict.get(3)) else result_dict.get(3)
@@ -990,7 +992,7 @@ class CrackService(Thread):
                 if scan_count >= 5:
                     break
 
-        def _buy_tickets() -> None:
+        def _buy_tickets() -> bool:
             self._skip_task_invite()
             exist, location = CrackController.wait_picture(self.index, 1,
                                                            CrackController.share_path +
@@ -1008,13 +1010,18 @@ class CrackService(Thread):
                     if exist:
                         CrackController.touch(self.index, CrackController.cheat(location))
                         _loot()
+                        return True
+            else:
+                return False
 
         def _choose_mitama() -> None:
             self._skip_task_invite()
-            exist, location = CrackController.wait_picture(self.index, 1,
+            exist, location = CrackController.wait_picture(self.index, 5,
                                                            CrackController.share_path +
                                                            'new_activity\\choose_mitama.png')
             if exist:
+                CrackController.touch(self.index, CrackController.cheat(location))
+                CrackController.random_sleep(1, 2)
                 _buy_tickets()
                 exist, location = CrackController.wait_picture(self.index, 3,
                                                                CrackController.share_path +
@@ -1028,11 +1035,11 @@ class CrackService(Thread):
 
         def _enter_next_level() -> None:
             self._skip_task_invite()
-            exist, location = CrackController.wait_picture(self.index, 3,
+            exist, location = CrackController.wait_picture(self.index, 5,
                                                            CrackController.share_path +
                                                            'new_activity\\enter_next_level_hint.png')
             if exist:
-                exist, location = CrackController.wait_picture(self.index, 3,
+                exist, location = CrackController.wait_picture(self.index, 5,
                                                                CrackController.share_path +
                                                                'new_activity\\enter_next_level_confirm.png')
                 if exist:
@@ -1052,7 +1059,9 @@ class CrackService(Thread):
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(click))
                     CrackController.random_sleep(2, 3)
-                    _buy_tickets()
+                    bought = _buy_tickets()
+                    if bought:
+                        CrackController.touch(self.index, CrackController.cheat(click))
                     CrackController.random_sleep(20, 30)
                     while True:
                         exist, click, _ = CrackController.check_picture_list(self.index,
