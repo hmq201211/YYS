@@ -1051,6 +1051,7 @@ class CrackService(Thread):
                                                             'new_activity\\begin_battle.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(click))
+                    CrackController.random_sleep(2, 3)
                     _buy_tickets()
                     CrackController.random_sleep(20, 30)
                     while True:
