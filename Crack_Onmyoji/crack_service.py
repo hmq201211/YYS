@@ -953,7 +953,10 @@ if len(result_dict) == 4:
     choose_row = result_dict.get(0) if len(result_dict.get(0)) < len(result_dict.get(3)) else result_dict.get(3)
     to_return = choose_row[len(choose_row) - 1] if choose_row[0][0] in range(*left_right_flag[0]) else choose_row[0]
 else:
-    choose_row = result_dict.get(0) if result_dict.get(0)[0][1] not in range(*gap_line[0]) else result_dict.get(
-        len(result_dict) - 1)
+    valid_rows = len(result_dict)
+    if result_dict.get(0) is None:
+        choose_row = result_dict.get(4 - valid_rows)
+    else:
+        choose_row = result_dict.get(valid_rows - 1)
     to_return = choose_row[random.randint(0, len(choose_row) - 1)]
 print(to_return)
