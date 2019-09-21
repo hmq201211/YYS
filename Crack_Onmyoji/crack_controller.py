@@ -272,16 +272,25 @@ class CrackController:
             locations_to_return.append((x, y, w, h))
         locations_to_return = sorted(locations_to_return, key=lambda location: location[0] + location[1])
         to_return = []
-        if len(locations_to_return) != 0:
-            for index in range(len(locations_to_return)):
-                if index + 1 == len(locations_to_return):
-                    to_return.append(locations_to_return[index])
-                elif abs(locations_to_return[index][0] - locations_to_return[
-                    index + 1][0]) < 20 and abs(locations_to_return[index][1]
-                                                - locations_to_return[index + 1][1]) < 20:
-                    continue
-                else:
-                    to_return.append(locations_to_return[index])
+        to_remove = []
+        for target in locations_to_return:
+            if target in to_remove:
+                continue
+            else:
+                to_return.append(target)
+                for test in locations_to_return:
+                    if abs(test[0] - target[0]) < 15 and abs(test[1] - target[1]) < 15:
+                        to_remove.append(test)
+        # if len(locations_to_return) != 0:
+        #     for index in range(len(locations_to_return)):
+        #         if index + 1 == len(locations_to_return):
+        #             to_return.append(locations_to_return[index])
+        #         elif abs(locations_to_return[index][0] - locations_to_return[
+        #             index + 1][0]) < 20 and abs(locations_to_return[index][1]
+        #                                         - locations_to_return[index + 1][1]) < 20:
+        #             continue
+        #         else:
+        #             to_return.append(locations_to_return[index])
         if debug:
             for x, y, w, h in to_return:
                 cv2.circle(screen_shot, (x, y), 5, (0, 0, 255), 2)

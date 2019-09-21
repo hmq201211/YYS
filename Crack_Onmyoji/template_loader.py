@@ -8,7 +8,8 @@ class TemplateLoader:
         all_files = glob.glob(r'Onmyoji_images\*.png')
         to_remove_list = glob.glob(r'Onmyoji_images\*_scr.png')
         all_invite_files = glob.glob(r'Onmyoji_images\invite\*.png')
-        all_files = all_files + all_invite_files
+        all_activity_files = glob.glob(r'Onmyoji_images\new_activity\*.png')
+        all_files = all_files + all_invite_files + all_activity_files
         for to_remove in to_remove_list:
             all_files.remove(to_remove)
         template_dict = {}
