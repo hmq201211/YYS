@@ -1092,7 +1092,3 @@ class CrackService(Thread):
                 CrackController.touch(self.index, CrackController.cheat(click_loc))
                 CrackController.random_sleep(2, 3)
                 _battle()
-
-
-c0 = CrackService(0)
-c0.monopoly()
