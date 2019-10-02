@@ -664,16 +664,21 @@ class CrackService(Thread):
                                 CrackController.touch(self.index, CrackController.cheat(location))
                             to_continue_list = [
                                 CrackController.share_path + "invite2_team.png",
-                                CrackController.share_path + "gift_chapter_flag.png",
                                 CrackController.share_path + "fix_team_flag.png"
                             ]
                             exist, location, template = CrackController.check_picture_list(self.index, to_continue_list)
                             if exist:
-                                if template == 'Onmyoji_images\\gift_chapter_flag.png':
-                                    self.leave_team(True)
-                                    break
-                                elif template == 'Onmyoji_images\\fix_team_flag.png':
-                                    break
+                                if template == 'Onmyoji_images\\fix_team_flag.png':
+                                    CrackController.random_sleep()
+                                    exist, _ = CrackController.wait_picture(self.index, 2,
+                                                                            CrackController.share_path +
+                                                                            "gift_chapter_flag.png")
+                                    if exist:
+                                        self.leave_team(True)
+                                        CrackController.random_sleep()
+                                        continue
+                                    else:
+                                        break
                                 else:
                                     while True:
                                         CrackController.touch(self.index, CrackController.cheat(location))
@@ -682,6 +687,7 @@ class CrackService(Thread):
                                                                                        + "invite2_team.png")
                                         if exist:
                                             CrackController.touch(self.index, CrackController.cheat(location))
+                                            CrackController.random_sleep()
                                         else:
                                             break
                                     break
