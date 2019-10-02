@@ -671,7 +671,7 @@ class CrackService(Thread):
                             if exist:
                                 if template == 'Onmyoji_images\\gift_chapter_flag.png':
                                     self.leave_team(True)
-                                    continue
+                                    break
                                 elif template == 'Onmyoji_images\\fix_team_flag.png':
                                     break
                                 else:
