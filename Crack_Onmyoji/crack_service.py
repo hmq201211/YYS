@@ -819,8 +819,12 @@ class CrackService(Thread):
         if exist:
             CrackController.touch(self.index, CrackController.cheat(location))
             CrackController.random_sleep(1, 2)
-            exist, location = CrackController.wait_picture(self.index, 3,
-                                                           CrackController.share_path + "team_confirm_leave.png")
+            if is_chapter:
+                exist, location = CrackController.wait_picture(self.index, 3,
+                                                               CrackController.share_path + "team_confirm_leave.png")
+            else:
+                exist, location = CrackController.wait_picture(self.index, 3,
+                                                               CrackController.share_path + "team2_confirm_leave.png")
             if exist:
                 CrackController.touch(self.index, CrackController.cheat(location))
             CrackController.random_sleep()
