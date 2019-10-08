@@ -1,13 +1,17 @@
+import cv2
+import numpy
 import win32gui
 import win32api
 import win32con
 import win32ui
 import time
-import pyautogui
+# import pyautogui
 import random
 
+from PIL import Image
+
 position_enter_game = (460, 480)
-fatherHandleThunder = win32gui.FindWindow("LDPlayerMainFrame", "窗口1")
+fatherHandleThunder = win32gui.FindWindow("LDPlayerMainFrame", "0")
 handleThunder = win32gui.FindWindowEx(fatherHandleThunder, 0, "RenderWindow", "TheRender")
 
 
@@ -76,8 +80,8 @@ def get_background_image(handle):
     if handle == 0:
         return "../images/blank.bmp"
     hwnd = handle
-    w = 960
-    h = 540
+    w = 1280
+    h = 720
     hwndDC = win32gui.GetWindowDC(hwnd)
     mfcDC = win32ui.CreateDCFromHandle(hwndDC)
     saveDC = mfcDC.CreateCompatibleDC()
@@ -87,7 +91,15 @@ def get_background_image(handle):
     img_dc = mfcDC
     mem_dc = saveDC
     mem_dc.BitBlt((0, 0), (w, h), img_dc, (0, 0), win32con.SRCCOPY)
-    saveBitMap.SaveBitmapFile(mem_dc, "../images/screenShot.bmp")
+    bmpinfo = saveBitMap.GetInfo()
+    bmparray = numpy.asarray(saveBitMap.GetBitmapBits(), dtype=numpy.uint8)
+    pil_im = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmparray, 'raw', 'BGRX', 0, 1)
+    pil_array = numpy.array(pil_im)
+    cv_im = cv2.cvtColor(pil_array, cv2.COLOR_RGB2BGR)
+    # saveBitMap.SaveBitmapFile(mem_dc, "screenShot.bmp")
+    # print(saveBitMap)
+    print(cv_im)
+    cv2.imwrite('test.png',cv_im)
     win32gui.DeleteObject(saveBitMap.GetHandle())
     saveDC.DeleteDC()
     mfcDC.DeleteDC()
@@ -128,7 +140,8 @@ def open_explore():
 
 
 def open_yuhun():
-    click_it(handleThunder, rect_to_cord(pyautogui.locate("../images/mitama_icon.png", get_background_image(handleThunder))))
+    click_it(handleThunder,
+             rect_to_cord(pyautogui.locate("../images/mitama_icon.png", get_background_image(handleThunder))))
 
 
 def open_snake():
@@ -136,7 +149,7 @@ def open_snake():
              rect_to_cord(pyautogui.locate("../images/snakeeye.png", get_background_image(handleThunder))))
 
 
-drag_it(handleThunder, (233,567), "right")
+drag_it(handleThunder, (233, 567), "right")
 # if is_explore_page():
 #     open_yuhun()
 #     time.sleep(3)
@@ -187,3 +200,4 @@ drag_it(handleThunder, (233,567), "right")
 #     click_it(handleThunder,
 #              rect_to_cord(pyautogui.locate("../images/fight.png", get_background_image(handleThunder))))
 #
+get_background_image(handleThunder)
