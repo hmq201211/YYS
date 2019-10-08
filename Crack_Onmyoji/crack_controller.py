@@ -8,6 +8,11 @@ import time
 import cv2
 import numpy
 import requests
+import win32con
+import win32gui
+import win32ui
+from PIL import Image
+
 from Crack_Onmyoji.game_detail import GameDetail
 from Crack_Onmyoji.template_loader import TemplateLoader
 from Crack_Onmyoji.player_detail import PlayerDetail
@@ -246,6 +251,30 @@ class CrackController:
         CrackController.random_sleep(sleep_time_low, sleep_time_high)
         screen = cv2.imread(CrackController.share_path + str(index) + 'apk_scr.png')
         return screen
+    # @staticmethod
+    # def screen_shot(index: int, sleep_time_low: float = 0.4, sleep_time_high: float = 0.6) -> list:
+    #     father_handle = win32gui.FindWindow("LDPlayerMainFrame", str(index))
+    #     handle = win32gui.FindWindowEx(father_handle, 0, "RenderWindow", "TheRender")
+    #     hwnd_dc = win32gui.GetWindowDC(handle)
+    #     mfc_dc = win32ui.CreateDCFromHandle(hwnd_dc)
+    #     save_dc = mfc_dc.CreateCompatibleDC()
+    #     save_bitmap = win32ui.CreateBitmap()
+    #     save_bitmap.CreateCompatibleBitmap(mfc_dc, *GameDetail.right_down_position)
+    #     save_dc.SelectObject(save_bitmap)
+    #     img_dc = mfc_dc
+    #     mem_dc = save_dc
+    #     mem_dc.BitBlt((0, 0), GameDetail.right_down_position, img_dc, (0, 0), win32con.SRCCOPY)
+    #     bmp_info = save_bitmap.GetInfo()
+    #     bmp_array = numpy.asarray(save_bitmap.GetBitmapBits(), dtype=numpy.uint8)
+    #     pil_im = Image.frombuffer('RGB', (bmp_info['bmWidth'], bmp_info['bmHeight']), bmp_array, 'raw', 'BGRX', 0, 1)
+    #     pil_array = numpy.array(pil_im)
+    #     cv_im = cv2.cvtColor(pil_array, cv2.COLOR_RGB2BGR)
+    #     win32gui.DeleteObject(save_bitmap.GetHandle())
+    #     save_dc.DeleteDC()
+    #     mfc_dc.DeleteDC()
+    #     win32gui.ReleaseDC(handle, hwnd_dc)
+    #     CrackController.random_sleep(sleep_time_low, sleep_time_high)
+    #     return cv_im
 
     # intercept picture to small picture and return small picture array
     @staticmethod
@@ -338,12 +367,11 @@ class CrackController:
 
     # wait for specified picture, assuming the player is running
     @staticmethod
-    def wait_picture(index: int, timeout: int, template: str, threshold: float = 0.85, sleep_time_low: float = 0.4,
-                     sleep_time_high: float = 0.6) -> (bool, (int, int, int, int)):
+    def wait_picture(index: int, timeout: int, template: str, threshold: float = 0.85) -> (bool, (int, int, int, int)):
 
         count = 0
         while count < timeout:
-            screen = CrackController.screen_shot(index, sleep_time_low, sleep_time_high)
+            screen = CrackController.screen_shot(index)
             print(str(index), ' is waiting... ', template)
             location, _ = CrackController.find_single_picture(screen, template, threshold)
             if location is None:
@@ -358,11 +386,9 @@ class CrackController:
     # check the current screen for the pattern picture list, if there exists, then return it.
     # if there exist many pattern pictures then return the first one, assuming the player is running
     @staticmethod
-    def check_picture_list(index: int, templates: list, threshold: float = 0.85, screen: list = None,
-                           sleep_time_low: float = 0.4,
-                           sleep_time_high: float = 0.6) -> (bool, (int, int, int, int), str):
+    def check_picture_list(index: int, templates: list, threshold: float = 0.85, screen: list = None) -> (bool, (int, int, int, int), str):
         if screen is None:
-            screen = CrackController.screen_shot(index, sleep_time_low, sleep_time_high)
+            screen = CrackController.screen_shot(index)
         check_list = []
         for template_index, template in enumerate(templates):
             print(str(index), ' is checking... ', template)
