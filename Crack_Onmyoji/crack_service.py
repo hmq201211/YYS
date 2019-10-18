@@ -456,12 +456,13 @@ class CrackService(Thread):
                     if exist:
                         CrackController.touch(self.index, CrackController.cheat(location))
                         CrackController.random_sleep(10, 12)
-            else:
-                exist, _ = CrackController.wait_picture(self.index, 1,
-                                                        CrackController.share_path +
-                                                        'group_break_through_icon.png')
-                if exist:
-                    refresh = True
+            # else:
+            #
+            #     exist, _ = CrackController.wait_picture(self.index, 1,
+            #                                             CrackController.share_path +
+            #                                             'group_break_through_icon.png')
+            #     if exist:
+            #         refresh = True
 
             if refresh:
                 exist, location = CrackController.wait_picture(self.index, 1,
