@@ -416,6 +416,7 @@ class CrackController:
         }
         response = requests.post(url, data=data, headers=headers)
         result = json.loads(response.text)
+        print(result)
         try:
             return result["words_result"][0]['words']
         except IndexError:

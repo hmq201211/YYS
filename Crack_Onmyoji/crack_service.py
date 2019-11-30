@@ -11,7 +11,7 @@ class CrackService(Thread):
     breakthrough_flag = False
     current_mode = None
     status_dict = {0: True, 1: True, 2: True, 3: True}
-    dont_want_to_breakthrough_list = [1, 2, 3]
+    dont_want_to_breakthrough_list = [0, 1, 2, 3]
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
         super().__init__()
@@ -66,7 +66,7 @@ class CrackService(Thread):
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)],
                                count: int = 10000, change_champion: bool = False, is_leader: bool = False) -> bool:
-        count_to_breakthrough = 120
+        count_to_breakthrough = 1200
         for i in range(math.ceil(count / count_to_breakthrough)):
             while True:
                 all_ready = True
