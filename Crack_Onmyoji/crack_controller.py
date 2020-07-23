@@ -8,10 +8,6 @@ import time
 import cv2
 import numpy
 import requests
-import win32con
-import win32gui
-import win32ui
-from PIL import Image
 
 from Crack_Onmyoji.game_detail import GameDetail
 from Crack_Onmyoji.template_loader import TemplateLoader
